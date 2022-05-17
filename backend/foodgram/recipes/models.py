@@ -46,6 +46,13 @@ class Tag(models.Model):
     )
     color = models.CharField('Цвет обложки', max_length=256)
 
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+
+
 class Ingridient(models.Model):
     title = models.CharField(
         verbose_name='Ингридиент',
@@ -58,6 +65,12 @@ class Ingridient(models.Model):
         verbose_name='Единица измерения',
         max_length=50
     )
+
+    class Meta:
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
 
 
 class Recipe(models.Model):
@@ -94,3 +107,9 @@ class Recipe(models.Model):
     time = models.IntegerField(
         verbose_name='Время приготовления'
     )
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
