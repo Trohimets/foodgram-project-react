@@ -73,9 +73,11 @@ class Recipe(models.Model):
         help_text='Название рецепта',
         max_length=256
     )
-    picture = models.IntegerField(
-        verbose_name='ЗАГЛУШКА'
-    )
+    picture = models.ImageField(
+        'Картинка',
+        upload_to='recipes/',
+        blank=True
+    )  
     description = models.TextField(verbose_name='Описание')
     ingridients = models.ManyToManyField(
         Ingridient,

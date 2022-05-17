@@ -10,10 +10,12 @@ class RecipeAdmin(admin.ModelAdmin):
         'description',
         'time'
     )
+    list_filter = ('time',)
 
 
 class TagAdmin(admin.ModelAdmin):
     list_display = (
+        'pk',
         'title',
         'color'
     )
