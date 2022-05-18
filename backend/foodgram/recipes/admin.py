@@ -4,13 +4,12 @@ from recipes.models import User, Recipe, Tag, Ingridient
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
-        'pk',
         'author',
         'name',
-        'description',
+        'tag',
         'time'
     )
-    list_filter = ('time',)
+    list_filter = ('author', 'name', 'tag')
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -24,9 +23,20 @@ class TagAdmin(admin.ModelAdmin):
 class IngridientAdmin(admin.ModelAdmin):
     list_display = (
         'title',
-        'amount',
         'unit'
     )
+    list_filter = ('title',)
+
+
+class UserADmin(admin.ModelAdmin):
+    list_display = (
+        'username',
+        'first_name',
+        'last_name',
+        'role',
+        'email'
+    )
+    list_filter = ('first_name', 'email')
 
 
 admin.site.register(User)
