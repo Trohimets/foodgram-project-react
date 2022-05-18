@@ -44,7 +44,7 @@ class Tag(models.Model):
         max_length=50,
         unique=True
     )
-    color = models.CharField('Цвет обложки', max_length=256)
+    color = models.CharField('Цвет тэга', max_length=7)
 
     class Meta:
         ordering = ['title']
@@ -98,8 +98,9 @@ class Recipe(models.Model):
         verbose_name='Ингридиент',
         help_text='Выберите ингридиенты'
     )
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         Tag,
+        through='TagRecipe',
         related_name='tags',
         verbose_name='Тэг',
         help_text='Выберите тэги'
@@ -113,3 +114,11 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TagRecipe(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.tag} {self.recipe}'

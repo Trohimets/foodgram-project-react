@@ -24,11 +24,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    tags = serializers.StringRelatedField(read_only=True, many=True)
 
     class Meta:
         model = Recipe
         fields = ('author', 'name', 'description',
-        'ingridients', 'tag', 'time')
+                  'ingridients', 'tags', 'time')
         lookup_field = 'author'
 
 
