@@ -6,10 +6,10 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'author',
         'name',
-        'tag',
         'time'
     )
-    list_filter = ('author', 'name', 'tag')
+    list_filter = ('author', 'name'
+    )
 
 
 class TagAdmin(admin.ModelAdmin):
