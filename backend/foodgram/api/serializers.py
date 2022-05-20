@@ -45,5 +45,5 @@ class IngridientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingridient
-        fields = ('title', 'amount', 'unit')
+        fields = ('title', 'unit')
         lookup_field = 'title'

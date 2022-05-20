@@ -9,13 +9,12 @@ from recipes.models import Ingridient
 
 def ingridient_create(row):
     Ingridient.objects.get_or_create(
-        id=row[0],
-        title=row[1],
-        unit=row[2],
+        title=row[0],
+        unit=row[1],
     )
 
 action = {
-    'ingredients.csv': ingridient_create,
+    'ingridients.csv': ingridient_create,
 }
 
 

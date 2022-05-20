@@ -58,9 +58,6 @@ class Ingridient(models.Model):
         verbose_name='Ингридиент',
         max_length=256
     )
-    amount = models.IntegerField(
-        verbose_name='Количество'
-    )
     unit = models.CharField(
         verbose_name='Единица измерения',
         max_length=50
