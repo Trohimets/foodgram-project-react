@@ -4,8 +4,15 @@ import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from recipes.models import Ingridient
+from recipes.models import Ingridient, Tag
 
+
+def tag_create(row):
+    Tag.objects.get_or_create(
+        title=row[0],
+        slug=row[1],
+        color=row[2],
+    )
 
 def ingridient_create(row):
     Ingridient.objects.get_or_create(
@@ -15,6 +22,7 @@ def ingridient_create(row):
 
 action = {
     'ingridients.csv': ingridient_create,
+    'tags.csv': tag_create
 }
 
 
