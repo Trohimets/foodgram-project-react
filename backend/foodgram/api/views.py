@@ -62,6 +62,7 @@ def token(request):
     return Response(data)
 
 
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
