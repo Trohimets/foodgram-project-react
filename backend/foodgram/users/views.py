@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db import IntegrityError
@@ -9,15 +10,13 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 
-from api.serializers import (UserSerializer,
-                             SignupSerializer, TokenSerializer)
+from users.serializers import (UserSerializer,
+                              TokenSerializer)
 from api.permissions import IsAdmin, ReadOnly
 from recipes.models import User
 from foodgram.settings import DEFAULT_FROM_EMAIL
 
 
-SUBJECT = 'YaMDb: код подверждения'
-MESSAGE = 'Ваш код подтверждения - {}'
 FIELD_ERROR = 'Неуникальное поле. Пользователь с таким {} уже существует'
 
 @api_view(['POST'])
@@ -49,29 +48,26 @@ def token(request):
     serializer.is_valid(raise_exception=True)
     user = get_object_or_404(
         User,
-        username=serializer.validated_data['username'],
+        email=serializer.validated_data['email'],
+        password=serializer.validated_data['password'],
     )
-    if not default_token_generator.check_token(
-            user,
-            serializer.validated_data['confirmation_code']):
-        return Response(status=status.HTTP_400_BAD_REQUEST)
     token = AccessToken.for_user(user)
     data = {
         'token': str(token),
     }
-    return Response(data)
+    return Response(f'"auth_token": "{data}"')
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAdmin,)
+    permission_classes = (AllowAny,)
     lookup_field = 'username'
 
     @action(
-        methods=['get', 'patch'],
+        methods=['get', 'post', 'patch'],
         detail=False,
-        permission_classes=(IsAuthenticated,),
+        permission_classes=(AllowAny,),
     )
     def me(self, request):
         if request.method == 'GET':

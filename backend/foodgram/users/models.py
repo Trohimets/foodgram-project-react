@@ -3,9 +3,11 @@ from django.contrib.auth.models import AbstractUser
 
 
 USER = "user"
+GUEST = "guest"
 ADMIN = "admin"
 ROLES = [
     ("user", USER),
+    ("guest", GUEST),
     ("admin", ADMIN)
 ]
 
@@ -30,5 +32,5 @@ class User(AbstractUser):
     role = models.CharField(
         max_length=max(len(role) for _, role in ROLES),
         choices=ROLES,
-        default=USER
+        default=GUEST
     )
