@@ -5,15 +5,14 @@ from api.views import RecipeViewSet, TagViewSet, IngridientViewSet
 from users.views import UserViewSet, token
 
 
-router_v1 = DefaultRouter()
-router_v1.register('users', UserViewSet, basename='users')
-router_v1.register('recipes', RecipeViewSet, basename='recipes')
-router_v1.register('tags', TagViewSet, basename='tags')
-router_v1.register(
+router = DefaultRouter()
+router.register('users', UserViewSet, basename='users')
+router.register('recipes', RecipeViewSet, basename='recipes')
+router.register('tags', TagViewSet, basename='tags')
+router.register(
     'ingridients', IngridientViewSet,
     basename='ingridients')
 
 urlpatterns = [
-    path('v1/', include(router_v1.urls)),
-    path('v1/auth/token/', token, name='token')
+    path('', include(router.urls)),
 ]

@@ -17,6 +17,10 @@ class User(AbstractUser):
         max_length=150,
         unique=True,
     )
+    password = models.CharField(
+        max_length=150,
+        unique=True,
+    )
     first_name = models.CharField(
         max_length=150,
         blank=True
