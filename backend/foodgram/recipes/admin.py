@@ -16,17 +16,17 @@ class RecipeAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
-        'title',
+        'name',
         'color'
     )
 
 
 class IngridientAdmin(admin.ModelAdmin):
     list_display = (
-        'title',
-        'unit'
+        'name',
+        'measurement_unit'
     )
-    list_filter = ('title',)
+    list_filter = ('name',)
 
 
 admin.site.register(Recipe, RecipeAdmin)

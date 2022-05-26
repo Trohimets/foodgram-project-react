@@ -2,7 +2,7 @@ from django.db import models
 from users.models import User
 
 class Tag(models.Model):
-    title = models.CharField(
+    name = models.CharField(
         verbose_name='Тэг',
         max_length=256
     )
@@ -14,27 +14,27 @@ class Tag(models.Model):
     color = models.CharField('Цвет тэга', max_length=7)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['name']
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Ingridient(models.Model):
-    title = models.CharField(
+    name = models.CharField(
         verbose_name='Ингридиент',
         max_length=256
     )
-    unit = models.CharField(
+    measurement_unit = models.CharField(
         verbose_name='Единица измерения',
         max_length=50
     )
 
     class Meta:
-        ordering = ['title']
+        ordering = ['name']
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Recipe(models.Model):

@@ -9,15 +9,15 @@ from recipes.models import Ingridient, Tag
 
 def tag_create(row):
     Tag.objects.get_or_create(
-        title=row[0],
+        name=row[0],
         slug=row[1],
         color=row[2],
     )
 
 def ingridient_create(row):
     Ingridient.objects.get_or_create(
-        title=row[0],
-        unit=row[1],
+        name=row[0],
+        measurement_unit=row[1],
     )
 
 action = {

@@ -8,8 +8,8 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('author', 'name', 'description',
-                  'ingridients', 'tags', 'time')
+        fields = ('id','tags', 'author','ingridients', 'name', 'description',
+                  'time')
         lookup_field = 'author'
 
 
@@ -17,7 +17,7 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ('title', 'slug', 'color')
+        fields = ('id', 'name', 'color', 'slug')
         lookup_field = 'slug'
 
 
@@ -25,5 +25,5 @@ class IngridientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingridient
-        fields = ('title', 'unit')
-        lookup_field = 'title'
+        fields = ('id', 'name', 'measurement_unit')
+        lookup_field = 'name'
