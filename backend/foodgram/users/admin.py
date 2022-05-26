@@ -4,10 +4,10 @@ from users.models import User
 
 class UserADmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'username',
         'first_name',
         'last_name',
-        'role',
         'email'
     )
     list_filter = ('first_name', 'email')
