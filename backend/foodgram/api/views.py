@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from api.serializers import (RecipeSerializer, TagSerializer,
                              IngridientSerializer)
 from recipes.models import Tag, Recipe, Ingridient
-from foodgram.settings import DEFAULT_FROM_EMAIL
 
 
 class RecipeViewSet(viewsets.ModelViewSet):

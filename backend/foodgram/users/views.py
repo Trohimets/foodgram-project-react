@@ -14,7 +14,6 @@ from users.serializers import (UserSerializer,
                               TokenSerializer)
 from api.permissions import IsAdmin, ReadOnly
 from recipes.models import User
-from foodgram.settings import DEFAULT_FROM_EMAIL
 
 
 FIELD_ERROR = 'Неуникальное поле. Пользователь с таким {} уже существует'

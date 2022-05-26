@@ -36,5 +36,5 @@ class User(AbstractUser):
     role = models.CharField(
         max_length=max(len(role) for _, role in ROLES),
         choices=ROLES,
-        default=GUEST
+        default=USER
     )

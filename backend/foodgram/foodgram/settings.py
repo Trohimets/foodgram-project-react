@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'djoser',
     'django_filters',
     'recipes',
     'api',
@@ -126,3 +127,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    }
