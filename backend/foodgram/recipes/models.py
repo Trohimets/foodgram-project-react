@@ -3,7 +3,7 @@ from users.models import User
 
 class Tag(models.Model):
     name = models.CharField(
-        verbose_name='Тэг',
+        verbose_name='Тег',
         max_length=256
     )
     slug = models.SlugField(
@@ -11,7 +11,7 @@ class Tag(models.Model):
         max_length=50,
         unique=True
     )
-    color = models.CharField('Цвет тэга', max_length=7)
+    color = models.CharField('Цвет тега', max_length=7)
 
     class Meta:
         ordering = ['name']
@@ -55,7 +55,7 @@ class Recipe(models.Model):
         upload_to='recipes/',
         blank=True
     )  
-    description = models.TextField(verbose_name='Описание')
+    text = models.TextField(verbose_name='Описание')
     ingridients = models.ManyToManyField(
         Ingridient,
         related_name='ingridients',

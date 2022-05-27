@@ -8,7 +8,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id','tags', 'author','ingridients', 'name', 'description',
+        fields = ('id','tags', 'author','ingridients', 'name', 'text',
                   'time')
         lookup_field = 'author'
 
