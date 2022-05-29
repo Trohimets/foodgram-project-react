@@ -20,9 +20,9 @@ class Tag(models.Model):
         return self.name
 
 
-class Ingridient(models.Model):
+class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name='Ингридиент',
+        verbose_name='Ингредиент',
         max_length=256
     )
     measurement_unit = models.CharField(
@@ -56,11 +56,12 @@ class Recipe(models.Model):
         blank=True
     )  
     text = models.TextField(verbose_name='Описание')
-    ingridients = models.ManyToManyField(
-        Ingridient,
-        related_name='ingridients',
-        verbose_name='Ингридиент',
-        help_text='Выберите ингридиенты'
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        through='IngredientMount',
+        related_name='ingredients',
+        verbose_name='Ингредиент',
+        help_text='Выберите ингредиенты'
     )
     tags = models.ManyToManyField(
         Tag,
@@ -69,7 +70,7 @@ class Recipe(models.Model):
         verbose_name='Тэг',
         help_text='Выберите тэги'
     )
-    time = models.IntegerField(
+    cooking_time = models.IntegerField(
         verbose_name='Время приготовления'
     )
 
@@ -83,6 +84,17 @@ class Recipe(models.Model):
 class TagRecipe(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.tag} {self.recipe}'
+
+
+class IngredientMount(models.Model):
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    mount = models.IntegerField(
+        verbose_name='Количество ингредиента'
+    )
 
     def __str__(self):
         return f'{self.tag} {self.recipe}'

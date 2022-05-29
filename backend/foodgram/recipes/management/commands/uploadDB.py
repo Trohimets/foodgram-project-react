@@ -4,7 +4,7 @@ import os
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from recipes.models import Ingridient, Tag
+from recipes.models import Ingredient, Tag
 
 
 def tag_create(row):
@@ -14,14 +14,14 @@ def tag_create(row):
         color=row[2],
     )
 
-def ingridient_create(row):
-    Ingridient.objects.get_or_create(
+def ingredient_create(row):
+    Ingredient.objects.get_or_create(
         name=row[0],
         measurement_unit=row[1],
     )
 
 action = {
-    'ingridients.csv': ingridient_create,
+    'ingredients.csv': ingredient_create,
     'tags.csv': tag_create
 }
 

@@ -24,3 +24,15 @@ class RegistrationSerializer(UserCreateSerializer):
             make_password(validated_data.pop('password'))
         )
         return super().create(validated_data)
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name'
+        )

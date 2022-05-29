@@ -1,16 +1,6 @@
 from django.shortcuts import render
 from rest_framework import serializers
-from recipes.models import Tag, Recipe, Ingridient
-
-
-class RecipeSerializer(serializers.ModelSerializer):
-    tags = serializers.StringRelatedField(read_only=True, many=True)
-
-    class Meta:
-        model = Recipe
-        fields = ('id','tags', 'author','ingridients', 'name', 'text',
-                  'time')
-        lookup_field = 'author'
+from recipes.models import Tag, Recipe, Ingredient
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -21,9 +11,19 @@ class TagSerializer(serializers.ModelSerializer):
         lookup_field = 'slug'
 
 
-class IngridientSerializer(serializers.ModelSerializer):
+class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Ingridient
+        model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
         lookup_field = 'name'
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(read_only=True, many=True)
+    ingredients = IngredientSerializer(read_only=True, many=True)
+    class Meta:
+        model = Recipe
+        fields = ('id','tags', 'author','ingredients', 'name', 'text',
+                  'cooking_time')
+        lookup_field = 'author'

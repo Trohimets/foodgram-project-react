@@ -126,7 +126,7 @@ python manage.py migrate
 Заполненить базу данных CSV-файлами:
 
 ```
-python manage.py uploadDB tags.csv ingridients.csv
+python manage.py uploadDB tags.csv ingredients.csv
 ```
 
 Запустить проект:
