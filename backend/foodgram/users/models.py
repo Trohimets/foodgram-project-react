@@ -6,20 +6,24 @@ class User(AbstractUser):
     username = models.CharField(
         max_length=150,
         unique=True,
+        verbose_name='юзернейм'
     )
     password = models.CharField(
         max_length=150,
-        unique=True,
+        verbose_name='пароль'
     )
     first_name = models.CharField(
         max_length=150,
-        blank=True
+        blank=True,
+        verbose_name='Имя'
     )
     last_name = models.CharField(
         max_length=150,
-        blank=True
+        blank=True,
+        verbose_name='Фамилия'
     )
     email = models.EmailField(
         max_length=254,
-        unique=True
+        unique=True,
+        verbose_name='Емейл'
     )
