@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import serializers
 from recipes.models import Tag, Recipe, Ingredient
-
+from users.serializers import RegistrationSerializer
 
 class TagSerializer(serializers.ModelSerializer):
 
@@ -18,12 +18,23 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit')
         lookup_field = 'name'
 
-
-class RecipeSerializer(serializers.ModelSerializer):
+# GET Recipe
+class RecipeGetSerializer(serializers.ModelSerializer):
+    author = RegistrationSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
     ingredients = IngredientSerializer(read_only=True, many=True)
     class Meta:
         model = Recipe
         fields = ('id','tags', 'author','ingredients', 'name', 'text',
+                  'cooking_time')
+        lookup_field = 'author'
+
+# POST Recipe
+class RecipePostSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(read_only=True, many=True)
+    ingredients = IngredientSerializer(read_only=True, many=True)
+    class Meta:
+        model = Recipe
+        fields = ('tags', 'ingredients', 'name', 'text',
                   'cooking_time')
         lookup_field = 'author'

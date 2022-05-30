@@ -1,16 +1,21 @@
+from requests import request
 from rest_framework import viewsets
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from api.serializers import (RecipeSerializer, TagSerializer,
-                             IngredientSerializer)
+from api.serializers import (RecipeGetSerializer, TagSerializer,
+                             RecipePostSerializer, IngredientSerializer)
 from recipes.models import Tag, Recipe, Ingredient
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('author', 'tags')
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return RecipeGetSerializer
+        return RecipePostSerializer
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
