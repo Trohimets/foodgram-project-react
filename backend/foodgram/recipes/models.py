@@ -92,9 +92,9 @@ class TagRecipe(models.Model):
 class IngredientMount(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    mount = models.IntegerField(
+    amount = models.IntegerField(
         verbose_name='Количество ингредиента'
     )
 
     def __str__(self):
-        return f'{self.ingredient} {self.recipe} {self.mount}'
+        return f'{self.ingredient} {self.recipe} {self.amount}'

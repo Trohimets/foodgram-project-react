@@ -38,9 +38,7 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 # for example:
 {
-  "id": 2,
-  "author": 1,
-  "name": "test",
+  "name": "test3",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
   "text": "test",
   "ingredients": [
@@ -63,8 +61,6 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
       "amount": 300
     }
   ],
-  "tags": [],
-  "cooking_time": 15,
-  "is_in_shopping_cart": false,
-  "is_favorited": false
+  "tags": [1, 2],
+  "cooking_time": 15
 }
