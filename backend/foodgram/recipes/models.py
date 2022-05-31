@@ -97,4 +97,4 @@ class IngredientMount(models.Model):
     )
 
     def __str__(self):
-        return f'{self.tag} {self.recipe}'
+        return f'{self.ingredient} {self.recipe} {self.mount}'
