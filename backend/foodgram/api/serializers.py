@@ -20,41 +20,38 @@ class BaseIngredientSerializer(serializers.ModelSerializer):
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
 
+class IngredientAmountGetSerializer(serializers.ModelSerializer):
 
-class IngredientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ('id', 'name', 'measurement_unit')
+
+
+class IngredientAmountPostSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all(),
-        source='ingredient.id'
-    )
-    name = serializers.CharField(
-        read_only=True,
-        source='ingredient.name'
-    )
-    measurement_unit = serializers.CharField(
-        read_only=True,
-        source='ingredient.measurement_unit'
+        queryset=Ingredient.objects.all()
     )
 
     class Meta:
         model = IngredientMount
-        fields = ('id', 'name', 'measurement_unit', 'amount')
+        fields = ('id', 'amount')
 
 
 # GET Recipe
 class RecipeGetSerializer(serializers.ModelSerializer):
     author = RegistrationSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
-    ingredients = IngredientSerializer(read_only=True, many=True)
-    is_favorited = serializers.SerializerMethodField()
-    in_shopping_list = serializers.SerializerMethodField()
+    ingredients = IngredientAmountGetSerializer(read_only=True, many=True)
+    #is_favorited = serializers.SerializerMethodField()
+    #in_shopping_list = serializers.SerializerMethodField()
 
-
+    
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients', 'name', 'text',
-                  'cooking_time', 'is_favorited', 'in_shopping_list')
+                  'cooking_time')
         lookup_field = 'author'
-
+# 'is_favorited', 'in_shopping_list')
 
 # POST Recipe
 class RecipePostSerializer(serializers.ModelSerializer):
@@ -62,7 +59,7 @@ class RecipePostSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True)
-    ingredients = IngredientSerializer(many=True)
+    ingredients = IngredientAmountPostSerializer(many=True)
 
     class Meta:
         model = Recipe
@@ -81,6 +78,6 @@ class RecipePostSerializer(serializers.ModelSerializer):
             )
         for ingredient in ingredients:
             IngredientMount.objects.create(
-                 ingredient=Ingredient.objects.get(id=ingredient['id']),
-                recipe=recipe, amount=ingredient['amount'])
+                 ingredient=ingredient['id'],
+                 recipe=recipe, amount=ingredient['amount'])
         return recipe

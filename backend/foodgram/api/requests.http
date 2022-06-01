@@ -6,6 +6,29 @@
 GET http://127.0.0.1:8000/api/users/
 Content-Type: application/json
 
+### Create user
+POST http://127.0.0.1:8000/api/users/
+Content-Type: application/json
+# for example:
+
+{
+    "email": "oland2@mail.ru",
+    "username": "oland2",
+    "first_name": "volan",
+    "last_name": "demort",
+    "password": "12345"
+    }
+
+### Take token for user
+POST http://127.0.0.1:8000/api/auth/token/login/
+Content-Type: application/json
+# for example:
+
+{
+    "email": "oland2@mail.ru",
+    "password": "12345"
+    }
+
 ### Current user
 GET http://127.0.0.1:8000/api/users/me/
 Content-Type: application/json
@@ -21,6 +44,7 @@ Content-Type: application/json
     "email": "admin@mail.ru",
     "password": "admin"
     }
+
 
 ### Get a recipes list
 GET http://127.0.0.1:8000/api/recipes/
@@ -61,6 +85,6 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
       "amount": 300
     }
   ],
-  "tags": [1, 2],
+  "tags": [1, 3],
   "cooking_time": 15
 }
