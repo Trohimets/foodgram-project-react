@@ -45,11 +45,14 @@ class RecipeGetSerializer(serializers.ModelSerializer):
     author = RegistrationSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
     ingredients = IngredientSerializer(read_only=True, many=True)
+    is_favorited = serializers.SerializerMethodField()
+    in_shopping_list = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients', 'name', 'text',
-                  'cooking_time')
+                  'cooking_time', 'is_favorited', 'in_shopping_list')
         lookup_field = 'author'
 
 
@@ -78,6 +81,6 @@ class RecipePostSerializer(serializers.ModelSerializer):
             )
         for ingredient in ingredients:
             IngredientMount.objects.create(
-                ingredient=ingredient,
+                 ingredient=Ingredient.objects.get(id=ingredient['id']),
                 recipe=recipe, amount=ingredient['amount'])
         return recipe

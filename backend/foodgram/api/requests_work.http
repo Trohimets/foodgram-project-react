@@ -27,7 +27,7 @@ GET http://127.0.0.1:8000/api/recipes/
 Content-Type: application/json
 
 ### Get a recipe by id
-GET http://127.0.0.1:8000/api/recipes/1/
+GET http://127.0.0.1:8000/api/recipes/4/
 Content-Type: application/json
 
 ### Create a recipe
@@ -38,7 +38,7 @@ Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a
 
 # for example:
 {
-  "name": "test2",
+  "name": "test3",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
   "text": "test",
   "ingredients": [
