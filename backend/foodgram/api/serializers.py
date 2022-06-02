@@ -22,15 +22,20 @@ class BaseIngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientAmountGetSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
-    name = serializers.CharField(source='ingredient.name')
-    measurement_unit = serializers.CharField(source='ingredient.measurement_unit')
+    amount = serializers.SerializerMethodField()
 
     class Meta:
-        model = IngredientMount
+        model = Ingredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
+    def get_amount(self, obj):
+        ingredient = IngredientMount.objects.get(id=obj.id)
+        return ingredient.amount
+
 class IngredientAmountPostSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all()
+    )
 
     class Meta:
         model = IngredientMount

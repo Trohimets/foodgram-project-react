@@ -51,7 +51,7 @@ GET http://127.0.0.1:8000/api/recipes/
 Content-Type: application/json
 
 ### Get a recipe by id
-GET http://127.0.0.1:8000/api/recipes/1/
+GET http://127.0.0.1:8000/api/recipes/34/
 Content-Type: application/json
 
 ### Create a recipe
@@ -62,7 +62,7 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 # for example:
 {
-  "name": "test3",
+  "name": "test5",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
   "text": "test",
   "ingredients": [
@@ -70,19 +70,19 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
       "id": 2,
       "name": "Картофель",
       "measurement_unit": "грамм",
-      "amount": 100
+      "amount": 10
     },
     {
       "id": 1,
       "name": "колбаса",
       "measurement_unit": "грамм",
-      "amount": 200
+      "amount": 20
     },
     {
       "id": 3,
       "name": "огурцы",
       "measurement_unit": "грамм",
-      "amount": 300
+      "amount": 30
     }
   ],
   "tags": [1, 3],
