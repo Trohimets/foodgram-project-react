@@ -50,7 +50,7 @@ class Recipe(models.Model):
         help_text='Название рецепта',
         max_length=256
     )
-    picture = models.ImageField(
+    image = models.ImageField(
         'Картинка',
         upload_to='recipes/',
         blank=True

@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from re import S
 from rest_framework import serializers
 from recipes.models import (Tag, Recipe,
                             Ingredient, IngredientMount, TagRecipe)
 from users.serializers import RegistrationSerializer
-from django.shortcuts import get_object_or_404
+from drf_extra_fields.fields import Base64ImageField
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -15,22 +15,22 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class BaseIngredientSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
+
 
 class IngredientAmountGetSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='ingredient.id')
+    name = serializers.CharField(source='ingredient.name')
+    measurement_unit = serializers.CharField(source='ingredient.measurement_unit')
 
     class Meta:
-        model = Ingredient
-        fields = ('id', 'name', 'measurement_unit')
-
+        model = IngredientMount
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 class IngredientAmountPostSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(
-        queryset=Ingredient.objects.all()
-    )
 
     class Meta:
         model = IngredientMount
@@ -48,8 +48,8 @@ class RecipeGetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'name', 'text',
-                  'cooking_time')
+        fields = ('id', 'tags', 'author', 'ingredients', 'name', 'image', 
+                  'text', 'cooking_time')
         lookup_field = 'author'
 # 'is_favorited', 'in_shopping_list')
 
@@ -60,10 +60,11 @@ class RecipePostSerializer(serializers.ModelSerializer):
         queryset=Tag.objects.all(),
         many=True)
     ingredients = IngredientAmountPostSerializer(many=True)
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
-        fields = ('author', 'tags', 'ingredients', 'name', 'text',
+        fields = ('ingredients', 'tags', 'image', 'author', 'name', 'text',
                   'cooking_time')
         lookup_field = 'author'
 

@@ -11,8 +11,10 @@ from recipes.models import Tag, Recipe, Ingredient
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,
+                       filters.OrderingFilter)
     filterset_fields = ('author', 'tags')
+    ordering_fields = ('name', 'id')
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
