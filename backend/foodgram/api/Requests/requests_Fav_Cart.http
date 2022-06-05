@@ -1,0 +1,57 @@
+### Get a recipe by id
+GET http://127.0.0.1:8000/api/recipes/36/
+Content-Type: application/json
+# for example:
+Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+
+
+### Create a Favorite
+POST http://127.0.0.1:8000/api/recipes/36/favorite/
+Content-Type: application/json
+# for example:
+Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+
+# for example:
+{
+  "id": "36",
+}
+
+### Delete a Favorite
+DELETE http://127.0.0.1:8000/api/recipes/36/favorite/
+Content-Type: application/json
+# for example:
+Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+
+# for example:
+{
+  "id": "36",
+}
+
+
+### Create a Cart
+POST http://127.0.0.1:8000/api/recipes/36/shopping_cart/
+Content-Type: application/json
+# for example:
+Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+
+# for example:
+{
+  "id": "36",
+}
+
+### Delete a Cart
+DELETE http://127.0.0.1:8000/api/recipes/36/shopping_cart/
+Content-Type: application/json
+# for example:
+Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+
+# for example:
+{
+  "id": "36",
+}
+
+### Download shopping_cart
+GET http://127.0.0.1:8000/api/recipes/download_shopping_cart/
+Content-Type: text/plain
+# for example:
+Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
