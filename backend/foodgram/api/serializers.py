@@ -1,8 +1,9 @@
 import traceback
 from requests import request
 from rest_framework import serializers
-from recipes.models import (Tag, Recipe, Favorite, Cart, Subscribe,
+from recipes.models import (Tag, Recipe, Favorite, Cart,
                             Ingredient, IngredientMount, TagRecipe)
+from users.models import Subscribe
 from users.serializers import RegistrationSerializer
 from drf_extra_fields.fields import Base64ImageField
 
