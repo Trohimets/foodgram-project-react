@@ -1,5 +1,5 @@
 from django.contrib import admin
-from users.models import User
+from users.models import User, Subscribe
 
 
 class UserADmin(admin.ModelAdmin):
@@ -12,5 +12,13 @@ class UserADmin(admin.ModelAdmin):
     )
     list_filter = ('first_name', 'email')
 
+class SubscribeADmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'following',
+    )
+    list_filter = ('following', 'user')
+
 
 admin.site.register(User)
+admin.site.register(Subscribe)

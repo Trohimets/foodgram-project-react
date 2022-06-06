@@ -3,8 +3,8 @@ from requests import request
 from rest_framework import serializers
 from recipes.models import (Tag, Recipe, Favorite, Cart,
                             Ingredient, IngredientMount, TagRecipe)
-from users.models import Subscribe
-from users.serializers import RegistrationSerializer
+from users.models import Subscribe, User
+
 from drf_extra_fields.fields import Base64ImageField
 
 
@@ -45,9 +45,31 @@ class IngredientAmountPostSerializer(serializers.ModelSerializer):
         fields = ('id', 'amount')
 
 
+class UserDetailSerializer(serializers.ModelSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_subscribed'
+        )
+
+    def is_subscribed(self, obj):
+        user = self.context['request'].user
+        return (
+            user.is_authenticated
+            and obj.subscribing.filter(user=user).exists()
+        )
+
+
 # GET Recipe
 class RecipeGetSerializer(serializers.ModelSerializer):
-    author = RegistrationSerializer(read_only=True)
+    author = UserDetailSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
     ingredients = IngredientAmountGetSerializer(read_only=True, many=True)
     is_favorited = serializers.SerializerMethodField()
@@ -85,7 +107,7 @@ class RecipeGetSerializer(serializers.ModelSerializer):
 
 # POST Recipe
 class RecipePostSerializer(serializers.ModelSerializer):
-    author = RegistrationSerializer(read_only=True)
+    author = UserDetailSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(),
         many=True)

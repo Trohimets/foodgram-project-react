@@ -1,13 +1,13 @@
-
+from http import HTTPStatus
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework import viewsets, permissions
-from api.serializers import (
+from users.serializers import (
     RegistrationSerializer,
     UserDetailSerializer,
-    SubscribeSrializer)
+    SubscribeSerializer)
 from users.models import User, Subscribe
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -51,27 +51,34 @@ class UserViewSet(viewsets.ViewSet):
 
 
 class SubscribeViewSet(viewsets.ViewSet):
+    serializer_class = SubscribeSerializer
     permission_classes = [permissions.IsAuthenticated]
-    #queryset = Subscribe.objects.filter(user=request.user)
+
+#    def get_queryset(self):
+#        return get_list_or_404(Subscribe, following__user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        followed = get_object_or_404(User, id=id)
-        follower = request.user
-        if Subscribe.objects.filter(user=follower, following=followed).exists():
-            return Response({
-                'errors': 'Вы и так уже подписаны'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        user_id = self.kwargs.get('users_id')
+        user = get_object_or_404(User, id=user_id)
         subscribe = Subscribe.objects.create(
-            user=follower, following=followed)
-        serializer = SubscribeSrializer()
-        return Response(serializer.to_representation(instance=subscribe.author),
-                    status=status.HTTP_201_CREATED
-                )
+            user=request.user, following=user)
+        serializer = SubscribeSerializer(subscribe, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
-        followed = get_object_or_404(User, id=id)
-        follower = request.user
-        object = get_object_or_404(
-            Subscribe, user=follower, following=followed)
-        object.delete()
-        return Response(status.HTTP_204_NO_CONTENT)
+        author_id = self.kwargs['users_id']
+        user_id = request.user.id
+        subscribe = get_object_or_404(
+            Subscribe, user__id=user_id, following__id=author_id)
+        subscribe.delete()
+        return Response(HTTPStatus.NO_CONTENT)
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def subscriptions(self, request):
+        user = request.user
+        queryset = Subscribe.objects.filter(user=user)
+        serializer = SubscribeSerializer(
+            many=True,
+            context={'request': request}
+        )
+        return self.response(serializer.data)

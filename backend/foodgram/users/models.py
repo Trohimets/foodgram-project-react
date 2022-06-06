@@ -27,6 +27,10 @@ class User(AbstractUser):
         unique=True,
         verbose_name='Емейл'
     )
+    is_subscribed = models.BooleanField(
+        default=False,
+        verbose_name='Подписка на данного пользователя',
+    )
 
 
 class Subscribe(models.Model):
