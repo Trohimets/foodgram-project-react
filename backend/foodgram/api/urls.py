@@ -18,8 +18,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('recipes/download_shopping_cart/',
          CartViewSet.as_view({'get': 'download'}), name='download'),
-    path('', include('djoser.urls')),
-    re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('recipes/<recipes_id>/favorite/',
          FavoriteViewSet.as_view({'post': 'create',
                                   'delete': 'delete'}), name='favorite'),
@@ -31,4 +29,6 @@ urlpatterns = [
                                    'delete': 'delete'}), name='subscribe'),
     path('users/subscriptions/',
          SubscribeViewSet.as_view({'get': 'subscriptions'}), name='subscriptions'),
+    path('', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]

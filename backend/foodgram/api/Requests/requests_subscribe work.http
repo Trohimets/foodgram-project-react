@@ -1,0 +1,22 @@
+#USERS
+
+### Subscriptions list
+GET http://127.0.0.1:8000/api/users/subscriptions/
+Content-Type: application/json
+# for example:
+Authorization: token bc9c74b669885ec7998806046e06d45307d1729d
+
+
+### subscribe user
+POST http://127.0.0.1:8000/api/users/1/subscribe/?recipes_limit=2
+Content-Type: application/json
+# for example:
+#Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+Authorization: token bc9c74b669885ec7998806046e06d45307d1729d
+
+### unsubscribe user
+DELETE http://127.0.0.1:8000/api/users/1/subscribe/
+Content-Type: application/json
+# for example:
+#Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+Authorization: token 403bbe88a0e5a44ab27e1c2336230c5e8c1c85d9

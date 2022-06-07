@@ -29,6 +29,18 @@ Content-Type: application/json
     "password": "petr"
     }
 
+### Change password for admin
+POST http://127.0.0.1:8000/api/users/set_password/
+Content-Type: application/json
+# for example petr:
+Authorization: token bc9c74b669885ec7998806046e06d45307d1729d
+
+{
+"new_password": "petr1",
+"current_password": "petr"
+}
+
+  
 ### Current user
 GET http://127.0.0.1:8000/api/users/me/
 Content-Type: application/json

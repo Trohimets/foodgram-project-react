@@ -75,10 +75,9 @@ class SubscribeViewSet(viewsets.ViewSet):
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def subscriptions(self, request):
-        user = request.user
-        queryset = Subscribe.objects.filter(user=user)
+        queryset = User.objects.filter(user=request.user)
         serializer = SubscribeSerializer(
             many=True,
             context={'request': request}
         )
-        return self.response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
