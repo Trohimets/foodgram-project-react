@@ -1,18 +1,15 @@
 from http import HTTPStatus
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
-from rest_framework import viewsets, permissions
-from users.serializers import (
-    RegistrationSerializer,
-    UserDetailSerializer,
-    SubscribeSerializer)
-from users.models import User, Subscribe
-from djoser.views import UserViewSet
-from django.shortcuts import get_list_or_404, get_object_or_404
-from rest_framework.response import Response
-from rest_framework import status
-from api.pagination import LimitPageNumberPagination
 
+from django.shortcuts import get_list_or_404, get_object_or_404
+from rest_framework import permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from api.pagination import LimitPageNumberPagination
+from users.models import Subscribe, User
+from users.serializers import (RegistrationSerializer, SubscribeSerializer,
+                               UserDetailSerializer)
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -57,7 +54,7 @@ class SubscribeViewSet(viewsets.ModelViewSet):
     serializer_class = SubscribeSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = LimitPageNumberPagination
-    
+
     def get_queryset(self):
         return get_list_or_404(Subscribe, user=self.request.user)
 
@@ -66,7 +63,8 @@ class SubscribeViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(User, id=user_id)
         subscribe = Subscribe.objects.create(
             user=request.user, following=user)
-        serializer = SubscribeSerializer(subscribe, context={'request': request})
+        serializer = SubscribeSerializer(subscribe,
+                                         context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
@@ -76,4 +74,3 @@ class SubscribeViewSet(viewsets.ModelViewSet):
             Subscribe, user__id=user_id, following__id=author_id)
         subscribe.delete()
         return Response(HTTPStatus.NO_CONTENT)
-

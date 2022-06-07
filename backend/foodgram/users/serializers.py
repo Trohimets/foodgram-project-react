@@ -1,8 +1,9 @@
-from rest_framework import serializers
-from users.models import User, Subscribe
-from recipes.models import Recipe
 from djoser.serializers import UserCreateSerializer
+from rest_framework import serializers
+
 from api.serializers import RecipeGetSerializer
+from recipes.models import Recipe
+from users.models import Subscribe, User
 
 
 class RegistrationSerializer(UserCreateSerializer):
@@ -23,10 +24,10 @@ class RegistrationSerializer(UserCreateSerializer):
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            validated_data['username'],
-            email = validated_data['email'],
-            password = validated_data['password']
-        )
+                                        validated_data['username'],
+                                        email=validated_data['email'],
+                                        password=validated_data['password']
+                                        )
         return user
 
     def is_subscribed(self, obj):
@@ -35,6 +36,7 @@ class RegistrationSerializer(UserCreateSerializer):
             user.is_authenticated
             and obj.subscribing.filter(user=user).exists()
         )
+
 
 class UserDetailSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
