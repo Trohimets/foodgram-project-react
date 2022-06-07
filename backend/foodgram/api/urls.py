@@ -2,7 +2,7 @@ from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
 from api.views import (RecipeViewSet, TagViewSet, IngredientViewSet,
-                       FavoriteViewSet, CartViewSet, DownloadCartViewSet)
+                       FavoriteViewSet, CartViewSet)
 from users.views import UserViewSet, SubscribeViewSet
 
 
@@ -15,9 +15,11 @@ router.register(
     basename='ingredients')
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('recipes/download_shopping_cart/',
          CartViewSet.as_view({'get': 'download'}), name='download'),
+    path('users/subscriptions/',
+         SubscribeViewSet.as_view({'get': 'list'}), name='subscriptions'),
+    path('', include(router.urls)),
     path('recipes/<recipes_id>/favorite/',
          FavoriteViewSet.as_view({'post': 'create',
                                   'delete': 'delete'}), name='favorite'),
@@ -27,8 +29,6 @@ urlpatterns = [
     path('users/<users_id>/subscribe/',
          SubscribeViewSet.as_view({'post': 'create',
                                    'delete': 'delete'}), name='subscribe'),
-    path('users/subscriptions/',
-         SubscribeViewSet.as_view({'get': 'subscriptions'}), name='subscriptions'),
     path('', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]

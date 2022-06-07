@@ -171,7 +171,6 @@ class CartSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
-
     class Meta:
         model = Cart
         fields = ('id', 'name', 'image', 'cooking_time')

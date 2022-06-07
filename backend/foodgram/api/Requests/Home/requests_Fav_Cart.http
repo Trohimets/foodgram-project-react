@@ -29,15 +29,10 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 
 ### Create a Cart
-POST http://127.0.0.1:8000/api/recipes/36/shopping_cart/
+POST http://127.0.0.1:8000/api/recipes/10/shopping_cart/
 Content-Type: application/json
 # for example:
 Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
-
-# for example:
-{
-  "id": "36",
-}
 
 ### Delete a Cart
 DELETE http://127.0.0.1:8000/api/recipes/36/shopping_cart/

@@ -7,9 +7,12 @@ from users.serializers import (
     UserDetailSerializer,
     SubscribeSerializer)
 from users.models import User, Subscribe
+from djoser.views import UserViewSet
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
+from api.pagination import LimitPageNumberPagination
+
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -50,12 +53,13 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class SubscribeViewSet(viewsets.ViewSet):
+class SubscribeViewSet(viewsets.ModelViewSet):
     serializer_class = SubscribeSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-#    def get_queryset(self):
-#        return get_list_or_404(Subscribe, following__user=self.request.user)
+    pagination_class = LimitPageNumberPagination
+    
+    def get_queryset(self):
+        return get_list_or_404(Subscribe, user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         user_id = self.kwargs.get('users_id')
@@ -73,11 +77,3 @@ class SubscribeViewSet(viewsets.ViewSet):
         subscribe.delete()
         return Response(HTTPStatus.NO_CONTENT)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
-    def subscriptions(self, request):
-        queryset = User.objects.filter(user=request.user)
-        serializer = SubscribeSerializer(
-            many=True,
-            context={'request': request}
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)

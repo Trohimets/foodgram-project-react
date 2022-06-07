@@ -4,7 +4,8 @@
 GET http://127.0.0.1:8000/api/users/subscriptions/
 Content-Type: application/json
 # for example:
-Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+#Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+Authorization: token 403bbe88a0e5a44ab27e1c2336230c5e8c1c85d9
 
 
 ### subscribe user
