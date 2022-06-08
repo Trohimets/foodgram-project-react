@@ -1,6 +1,5 @@
-import traceback
-
 from drf_extra_fields.fields import Base64ImageField
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
 from recipes.models import (Cart, Favorite, Ingredient, IngredientMount,
@@ -24,14 +23,14 @@ class BaseIngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientAmountGetSerializer(serializers.ModelSerializer):
-    amount = serializers.SerializerMethodField()
+    amount = serializers.SerializerMethodField(method_name='get_amount')
 
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
     def get_amount(self, obj):
-        ingredient = IngredientMount.objects.get(id=obj.id)
+        ingredient = get_object_or_404(IngredientMount, id=obj.id)
         return ingredient.amount
 
 
@@ -46,7 +45,7 @@ class IngredientAmountPostSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(method_name='is_subscribed')
 
     class Meta:
         model = User
@@ -67,13 +66,14 @@ class UserDetailSerializer(serializers.ModelSerializer):
         )
 
 
-# GET Recipe
 class RecipeGetSerializer(serializers.ModelSerializer):
     author = UserDetailSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
     ingredients = IngredientAmountGetSerializer(read_only=True, many=True)
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField(
+        method_name='get_is_favorited')
+    is_in_shopping_cart = serializers.SerializerMethodField(
+        method_name='get_is_in_shopping_cart')
 
     class Meta:
         model = Recipe
@@ -81,31 +81,25 @@ class RecipeGetSerializer(serializers.ModelSerializer):
                   'text', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
         lookup_field = 'author'
 
-    def get_status_func(self, data):
+    def get_is_favorited(self, obj):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
             return False
-        try:
-            user = self.context.get('request').user
-        except:
-            user = self.context.get('user')
-        callname_function = format(traceback.extract_stack()[-2][2])
-        if callname_function == 'get_is_favorited':
-            init_queryset = Favorite.objects.filter(recipe=data.id, user=user)
-        elif callname_function == 'get_is_in_shopping_cart':
-            init_queryset = Cart.objects.filter(recipe=data, user=user)
-        if init_queryset.exists():
+        if Favorite.objects.filter(user=request.user,
+                                   recipe__id=obj.id).exists():
             return True
         return False
 
-    def get_is_favorited(self, data):
-        return self.get_status_func(data)
+    def get_is_in_shopping_cart(self, obj):
+        request = self.context.get('request')
+        if request is None or request.user.is_anonymous:
+            return False
+        if Cart.objects.filter(user=request.user,
+                               recipe__id=obj.id).exists():
+            return True
+        return False
 
-    def get_is_in_shopping_cart(self, data):
-        return self.get_status_func(data)
 
-
-# POST Recipe
 class RecipePostSerializer(serializers.ModelSerializer):
     author = UserDetailSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(

@@ -10,6 +10,7 @@ from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from api.serializers import (BaseIngredientSerializer, CartSerializer,
                              FavoriteSerializer, RecipeGetSerializer,
                              RecipePostSerializer, TagSerializer)
+from foodgram.pagination import LimitPageNumberPagination
 from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
 
 
@@ -18,8 +19,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter)
     filterset_fields = ('author', 'tags')
-    ordering_fields = ('name', 'id')
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = (IsOwnerOrReadOnly,)
+    pagination_class = LimitPageNumberPagination
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -57,13 +58,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    pagination_class = None
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = BaseIngredientSerializer
-    pagination_class = None
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
@@ -99,8 +98,9 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 
 
 class CartViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = CartSerializer
+    pagination_class = LimitPageNumberPagination
     queryset = Cart.objects.all()
     model = Cart
 
@@ -115,8 +115,8 @@ class CartViewSet(viewsets.ModelViewSet):
             user=request.user, recipe=recipe)
         serializer = CartSerializer()
         return Response(serializer.to_representation(instance=recipe),
-                    status=status.HTTP_201_CREATED
-                )
+                        status=status.HTTP_201_CREATED
+                        )
 
     def delete(self, request, *args, **kwargs):
         recipe_id = self.kwargs['recipes_id']

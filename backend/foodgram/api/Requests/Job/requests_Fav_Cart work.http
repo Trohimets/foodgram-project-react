@@ -6,7 +6,7 @@ Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a
 
 
 ### Create a Favorite
-POST http://127.0.0.1:8000/api/recipes/36/favorite/
+POST http://127.0.0.1:8000/api/recipes/40/favorite/
 Content-Type: application/json
 # for example:
 Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a
@@ -17,7 +17,7 @@ Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a
 }
 
 ### Delete a Favorite
-DELETE http://127.0.0.1:8000/api/recipes/36/favorite/
+DELETE http://127.0.0.1:8000/api/recipes/40/favorite/
 Content-Type: application/json
 # for example:
 Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a

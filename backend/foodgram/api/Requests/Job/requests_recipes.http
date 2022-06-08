@@ -1,0 +1,43 @@
+ 
+### Get a recipes list
+GET http://127.0.0.1:8000/api/recipes/
+Content-Type: application/json
+
+### Get a recipe by id
+GET http://127.0.0.1:8000/api/recipes/4/
+Content-Type: application/json
+
+### Create a recipe
+POST http://127.0.0.1:8000/api/recipes/
+Content-Type: application/json
+# for example:
+Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a
+
+# for example:
+{
+  "name": "test3",
+  "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
+  "text": "test",
+  "ingredients": [
+    {
+      "id": 2,
+      "name": "Картофель",
+      "measurement_unit": "грамм",
+      "amount": 100
+    },
+    {
+      "id": 1,
+      "name": "колбаса",
+      "measurement_unit": "грамм",
+      "amount": 200
+    },
+    {
+      "id": 3,
+      "name": "огурцы",
+      "measurement_unit": "грамм",
+      "amount": 300
+    }
+  ],
+  "tags": [1, 2],
+  "cooking_time": 15
+}

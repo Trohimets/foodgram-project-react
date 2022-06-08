@@ -7,7 +7,8 @@ from users.models import Subscribe, User
 
 
 class RegistrationSerializer(UserCreateSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(
+        method_name='get_is_subscribed')
 
     class Meta:
         model = User
@@ -39,7 +40,8 @@ class RegistrationSerializer(UserCreateSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(
+        method_name='get_is_subscribed')
 
     class Meta:
         model = User
@@ -66,9 +68,12 @@ class SubscribeSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='following.username')
     first_name = serializers.ReadOnlyField(source='following.first_name')
     last_name = serializers.ReadOnlyField(source='following.last_name')
-    is_subscribed = serializers.SerializerMethodField()
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(
+        method_name='get_is_subscribed')
+    recipes = serializers.SerializerMethodField(
+        method_name='get_recipes')
+    recipes_count = serializers.SerializerMethodField(
+        method_name='get_recipes_count')
 
     class Meta:
         model = Subscribe

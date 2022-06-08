@@ -101,14 +101,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': [
-        'rest_framework.pagination.LimitOffsetPagination',
-    ],
-    'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ]
 }
+
+# size for custom pagination in API
+PAGE_SIZE = 10
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
