@@ -1,5 +1,5 @@
 from http import HTTPStatus
-
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -11,8 +11,11 @@ from api.serializers import (BaseIngredientSerializer, CartSerializer,
                              FavoriteSerializer, RecipeGetSerializer,
                              RecipePostSerializer, TagSerializer)
 from foodgram.pagination import LimitPageNumberPagination
-from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
+from foodgram.settings import FILENAME
+from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag, IngredientMount
 
+
+CONTENT_TYPE='text/plain'
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
@@ -77,10 +80,6 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         recipe_id = int(self.kwargs['recipes_id'])
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        if Favorite.objects.filter(user=request.user, recipe=recipe).exists():
-            return Response({
-                'errors': 'Рецепт уже добавлен в Избранное'
-            }, status=status.HTTP_400_BAD_REQUEST)
         self.model.objects.create(
             user=request.user, recipe=recipe)
         serializer = FavoriteSerializer()
@@ -107,10 +106,6 @@ class CartViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         recipe_id = int(self.kwargs['recipes_id'])
         recipe = get_object_or_404(Recipe, id=recipe_id)
-        if Cart.objects.filter(user=request.user, recipe=recipe).exists():
-            return Response({
-                'errors': 'Рецепт уже добавлен в список покупок'
-            }, status=status.HTTP_400_BAD_REQUEST)
         self.model.objects.create(
             user=request.user, recipe=recipe)
         serializer = CartSerializer()
@@ -127,29 +122,18 @@ class CartViewSet(viewsets.ModelViewSet):
         return Response(HTTPStatus.NO_CONTENT)
 
     def download(self, request):
-        shopping_cart = Cart.objects.filter(user=request.user).all()
-        shopping_list = {}
-        for item in shopping_cart:
-            for recipe_ingredient in item.recipe.recipe_ingredients.all():
-                name = recipe_ingredient.ingredient.name
-                measuring_unit = recipe_ingredient.ingredient.measurement_unit
-                amount = recipe_ingredient.amount
-                if name not in shopping_list:
-                    shopping_list[name] = {
-                        'name': name,
-                        'measurement_unit': measuring_unit,
-                        'amount': amount
-                    }
-                else:
-                    shopping_list[name]['amount'] += amount
+        shopping_list = IngredientMount.objects.filter(
+            recipe__shopping_cart__user=request.user).values(
+            'ingredient__name', 'ingredient__measurement_unit').order_by(
+                'ingredient__name').annotate(ingredient_total=Sum('amount'))
+
         content = (
-                    [f'{item["name"]} ({item["measurement_unit"]}) '
-                     f'- {item["amount"]}\n'
-                     for item in shopping_list.values()]
+         [f'{item["ingredient__name"]} ({item["ingredient__measurement_unit"]})'
+          f'- {item["ingredient_total"]}\n'
+          for item in shopping_list]
                    )
-        filename = 'shopping_list.txt'
-        response = HttpResponse(content, content_type='text/plain')
+        response = HttpResponse(content, content_type=CONTENT_TYPE)
         response['Content-Disposition'] = (
-            'attachment; filename={0}'.format(filename)
+            f'attachment; filename={FILENAME}'
         )
         return response

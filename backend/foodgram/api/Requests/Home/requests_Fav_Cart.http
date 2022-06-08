@@ -6,7 +6,7 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 
 ### Create a Favorite
-POST http://127.0.0.1:8000/api/recipes/36/favorite/
+POST http://127.0.0.1:8000/api/recipes/32/favorite/
 Content-Type: application/json
 # for example:
 Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
@@ -29,13 +29,13 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 
 ### Create a Cart
-POST http://127.0.0.1:8000/api/recipes/10/shopping_cart/
+POST http://127.0.0.1:8000/api/recipes/12/shopping_cart/
 Content-Type: application/json
 # for example:
 Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 ### Delete a Cart
-DELETE http://127.0.0.1:8000/api/recipes/36/shopping_cart/
+DELETE http://127.0.0.1:8000/api/recipes/10/shopping_cart/
 Content-Type: application/json
 # for example:
 Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
