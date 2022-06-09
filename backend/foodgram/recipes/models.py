@@ -166,7 +166,7 @@ class Favorite(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe',),
-                name='unique_user_recipe',
+                name='unique_user_favorite_recipe',
             ),
         )
 
@@ -195,7 +195,7 @@ class Cart(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe',),
-                name='unique_user_recipe',
+                name='unique_user_cart_recipe',
             ),
         )
 
