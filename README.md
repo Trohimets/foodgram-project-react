@@ -135,3 +135,13 @@ python manage.py uploadDB tags.csv ingredients.csv
 python manage.py runserver
 ```
 
+# Пример заполнения файла .env:
+
+SECRET_KEY=ab^&91hzhl%sdfw-=u7utwqq@d=_je3q9xsur#$0h=8j4rncdwy
+DEBUG=True
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
