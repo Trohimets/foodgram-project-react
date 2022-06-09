@@ -1,6 +1,6 @@
 from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
-
+from rest_framework.validators import UniqueValidator
 from api.serializers import RecipeGetSerializer
 from recipes.models import Recipe
 from users.models import Subscribe, User
@@ -9,6 +9,12 @@ from users.models import Subscribe, User
 class RegistrationSerializer(UserCreateSerializer):
     is_subscribed = serializers.SerializerMethodField(
         method_name='get_is_subscribed')
+    username = serializers.CharField(
+        validators=(UniqueValidator(queryset=User.objects.all()),)
+    )
+    email = serializers.EmailField(
+        validators=(UniqueValidator(queryset=User.objects.all()),)
+    )
 
     class Meta:
         model = User

@@ -1,7 +1,7 @@
 from drf_extra_fields.fields import Base64ImageField
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
 from recipes.models import (Cart, Favorite, Ingredient, IngredientMount,
                             Recipe, Tag, TagRecipe)
@@ -9,6 +9,10 @@ from users.models import User
 
 
 class TagSerializer(serializers.ModelSerializer):
+    slug = serializers.SlugField(
+        max_length=200,
+        validators=(UniqueValidator(queryset=Tag.objects.all()),)
+    )
 
     class Meta:
         model = Tag
@@ -154,7 +158,6 @@ class RecipePostSerializer(serializers.ModelSerializer):
         if not ingredients:
             raise serializers.ValidationError({
                 'ingredients': 'Нужен хоть один ингридиент для рецепта'})
-        print(ingredients)
         ingredient_list = []
         for ingredient_item in ingredients:
             ingredient = get_object_or_404(Ingredient,
@@ -193,6 +196,7 @@ class CartSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     cooking_time = serializers.IntegerField()
     image = Base64ImageField(max_length=None, use_url=False,)
+
     class Meta:
         model = Cart
         fields = ('id', 'name', 'image', 'cooking_time')
