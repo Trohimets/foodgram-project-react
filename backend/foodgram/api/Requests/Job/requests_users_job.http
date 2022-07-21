@@ -45,13 +45,13 @@ Authorization: token bc9c74b669885ec7998806046e06d45307d1729d
 GET http://127.0.0.1:8000/api/users/me/
 Content-Type: application/json
 # for example admin:
-Authorization: token f4a38d7734b54c6829f6fc43c95553ced9dbec7a
+Authorization: token b4e524ff601bc01ea6fe1aec6c71a2f7ee3e3318
 
 ### Current user
 GET http://127.0.0.1:8000/api/users/me/
 Content-Type: application/json
 # for example petr:
-Authorization: token bc9c74b669885ec7998806046e06d45307d1729d
+Authorization: token b4e524ff601bc01ea6fe1aec6c71a2f7ee3e3318
 
 ### Take token for admin
 POST http://127.0.0.1:8000/api/auth/token/login/
