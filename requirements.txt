@@ -49,4 +49,4 @@ uritemplate==4.1.1
 urllib3==1.26.9
 python_dotenv==0.20.0
 gunicorn==20.0.4
-psycopg2-binary==2.8.5
+psycopg2-binary==2.9.3

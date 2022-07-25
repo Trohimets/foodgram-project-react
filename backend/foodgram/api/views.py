@@ -21,7 +21,7 @@ CONTENT_TYPE='text/plain'
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filter_class = AuthorAndTagFilter
-    permission_classes = (IsOwnerOrReadOnly,)
+    #permission_classes = (IsOwnerOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
     def get_serializer_class(self):
@@ -37,10 +37,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         serializer = RecipeGetSerializer(instance=serializer.instance)
-        headers = self.get_success_headers(serializer.data)
+        #headers = self.get_success_headers(serializer.data)
         return Response(serializer.data,
-                        status=status.HTTP_201_CREATED,
-                        headers=headers)
+                        status=status.HTTP_201_CREATED)
+                        #headers=headers)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
