@@ -6,22 +6,25 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.response import Response
 
-from api.filters import AuthorAndTagFilter, IngredientSearchFilter
+from api.filters import AuthorAndTagFilter
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from api.serializers import (BaseIngredientSerializer, CartSerializer,
                              FavoriteSerializer, RecipeGetSerializer,
                              RecipePostSerializer, TagSerializer)
-from foodgram.pagination import LimitPageNumberPagination
+from api.paginations import LimitPageNumberPagination
 from foodgram.settings import FILENAME
-from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag, IngredientMount
+from recipes.models import Cart, Favorite, Ingredient
+from recipes.models import Recipe, Tag, IngredientMount
 
 
-CONTENT_TYPE='text/plain'
+CONTENT_TYPE = 'text/plain'
+
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
+    filter_backends = (DjangoFilterBackend,)
     filter_class = AuthorAndTagFilter
-    #permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
     pagination_class = LimitPageNumberPagination
 
     def get_serializer_class(self):
@@ -65,9 +68,10 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = BaseIngredientSerializer
+    pagination_class = None
     permission_classes = (IsAdminOrReadOnly,)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('name',)
+    search_fields = ('^name',)
 
 
 class FavoriteViewSet(viewsets.ModelViewSet):

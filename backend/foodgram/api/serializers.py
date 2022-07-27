@@ -79,6 +79,7 @@ class RecipeGetSerializer(serializers.ModelSerializer):
         method_name='get_is_favorited')
     is_in_shopping_cart = serializers.SerializerMethodField(
         method_name='get_is_in_shopping_cart')
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
