@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.response import Response
 
-from api.filters import AuthorAndTagFilter
+from api.filters import AuthorAndTagFilter, IngredientSearchFilter
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from api.serializers import (BaseIngredientSerializer, CartSerializer,
                              FavoriteSerializer, RecipeGetSerializer,
@@ -70,7 +70,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BaseIngredientSerializer
     pagination_class = None
     permission_classes = (IsAdminOrReadOnly,)
-    filter_backends = (filters.SearchFilter,)
+    filterset_class = IngredientSearchFilter
     search_fields = ('^name',)
 
 
