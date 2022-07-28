@@ -28,15 +28,34 @@ class BaseIngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientAmountGetSerializer(serializers.ModelSerializer):
-    amount = serializers.SerializerMethodField(method_name='get_amount')
+    id = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    measurement_unit = serializers.SerializerMethodField()
 
     class Meta:
-        model = Ingredient
-        fields = ('id', 'name', 'measurement_unit', 'amount')
+        model = IngredientMount
+        fields = ('id', "name", "measurement_unit", "amount")
 
-    def get_amount(self, obj):
-        ingredient = get_object_or_404(IngredientMount, id=obj.id)
-        return ingredient.amount
+    def get_id(self, obj):
+        return obj.ingredient.id
+
+    def get_name(self, obj):
+        return obj.ingredient.name
+
+    def get_measurement_unit(self, obj):
+        return obj.ingredient.measurement_unit
+
+
+# class IngredientAmountGetSerializer(serializers.ModelSerializer):
+#     amount = serializers.SerializerMethodField(method_name='get_amount')
+
+#     class Meta:
+#         model = Ingredient
+#         fields = ('id', 'name', 'measurement_unit', 'amount')
+
+#     def get_amount(self, obj):
+#         ingredient = get_object_or_404(IngredientMount, id=obj.id)
+#         return ingredient.amount
 
 
 class IngredientAmountPostSerializer(serializers.ModelSerializer):
@@ -74,7 +93,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 class RecipeGetSerializer(serializers.ModelSerializer):
     author = UserDetailSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
-    ingredients = IngredientAmountGetSerializer(read_only=True, many=True)
+    ingredients = IngredientAmountGetSerializer(read_only=True, many=True, source='recipe_ingredients')
     is_favorited = serializers.SerializerMethodField(
         method_name='get_is_favorited')
     is_in_shopping_cart = serializers.SerializerMethodField(
@@ -82,9 +101,19 @@ class RecipeGetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'name', 'image',
-                  'text', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
-        lookup_field = 'author'
+        fields = (
+            'id',
+            'tags',
+            'author',
+            'ingredients',
+            'name',
+            'image',
+            'text',
+            'cooking_time',
+            'is_favorited',
+            'is_in_shopping_cart'
+        )
+        #lookup_field = 'author'
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
