@@ -4,7 +4,6 @@ docker-compose exec web python manage.py collectstatic --no-input
 docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
 
 
-
 # Cервис для публикаций и обмена рецептами.
 
 
