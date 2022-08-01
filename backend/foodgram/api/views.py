@@ -132,7 +132,7 @@ class CartViewSet(viewsets.ModelViewSet):
             [f'{item["ingredient__name"]} ({item["ingredient__measurement_unit"]})'
             f'- {item["ingredient_total"]}\n'
             for item in shopping_list]
-            )
+                   )
         response = HttpResponse(content, content_type=CONTENT_TYPE)
         response['Content-Disposition'] = (
             f'attachment; filename={FILENAME}'
