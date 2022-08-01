@@ -36,7 +36,7 @@ class RegistrationSerializer(UserCreateSerializer):
             password=validated_data['password'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']
-                                        )
+        )
         return user
 
     def is_subscribed(self, obj):

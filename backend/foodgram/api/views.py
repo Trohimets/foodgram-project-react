@@ -1,11 +1,11 @@
 from http import HTTPStatus
+
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
-
 from api.filters import AuthorAndTagFilter, IngredientSearchFilter
 from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from api.serializers import (BaseIngredientSerializer, CartSerializer,
@@ -40,10 +40,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         serializer = RecipeGetSerializer(instance=serializer.instance)
-        #headers = self.get_success_headers(serializer.data)
         return Response(serializer.data,
                         status=status.HTTP_201_CREATED)
-                        #headers=headers)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -87,8 +85,8 @@ class FavoriteViewSet(viewsets.ModelViewSet):
             user=request.user, recipe=recipe)
         serializer = FavoriteSerializer()
         return Response(serializer.to_representation(instance=recipe),
-                    status=status.HTTP_201_CREATED
-                )
+                        status=status.HTTP_201_CREATED
+                        )
 
     def delete(self, request, *args, **kwargs):
         recipe_id = self.kwargs['recipes_id']
@@ -131,10 +129,10 @@ class CartViewSet(viewsets.ModelViewSet):
                 'ingredient__name').annotate(ingredient_total=Sum('amount'))
 
         content = (
-         [f'{item["ingredient__name"]} ({item["ingredient__measurement_unit"]})'
-          f'- {item["ingredient_total"]}\n'
-          for item in shopping_list]
-                   )
+            [f'{item["ingredient__name"]} ({item["ingredient__measurement_unit"]})'
+            f'- {item["ingredient_total"]}\n'
+            for item in shopping_list]
+            )
         response = HttpResponse(content, content_type=CONTENT_TYPE)
         response['Content-Disposition'] = (
             f'attachment; filename={FILENAME}'

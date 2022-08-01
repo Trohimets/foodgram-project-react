@@ -14,7 +14,7 @@ from users.serializers import (RegistrationSerializer, SubscribeSerializer,
 
 class UserViewSet(viewsets.ViewSet):
     pagination_class = LimitPageNumberPagination
-    
+
     def create(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():

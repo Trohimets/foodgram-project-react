@@ -70,7 +70,7 @@ class Recipe(models.Model):
         upload_to='recipes/',
         blank=True,
         help_text='Выберите изображение рецепта'
-    )  
+    )
     text = models.TextField(verbose_name='Описание рецепта',
                             help_text='Введите описания рецепта')
     ingredients = models.ManyToManyField(

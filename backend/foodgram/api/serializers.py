@@ -69,7 +69,8 @@ class IngredientAmountPostSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField(method_name='is_subscribed')
+    is_subscribed = serializers.SerializerMethodField(
+        method_name='is_subscribed')
 
     class Meta:
         model = User
@@ -93,7 +94,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
 class RecipeGetSerializer(serializers.ModelSerializer):
     author = UserDetailSerializer(read_only=True)
     tags = TagSerializer(read_only=True, many=True)
-    ingredients = IngredientAmountGetSerializer(read_only=True, many=True, source='recipe_ingredients')
+    ingredients = IngredientAmountGetSerializer(
+        read_only=True,
+        many=True,
+        source='recipe_ingredients'
+    )
     is_favorited = serializers.SerializerMethodField(
         method_name='get_is_favorited')
     is_in_shopping_cart = serializers.SerializerMethodField(
@@ -113,7 +118,6 @@ class RecipeGetSerializer(serializers.ModelSerializer):
             'is_favorited',
             'is_in_shopping_cart'
         )
-        #lookup_field = 'author'
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
@@ -159,8 +163,8 @@ class RecipePostSerializer(serializers.ModelSerializer):
             )
         for ingredient in ingredients:
             IngredientMount.objects.create(
-                 ingredient=ingredient['id'],
-                 recipe=recipe, amount=ingredient['amount'])
+                ingredient=ingredient['id'],
+                recipe=recipe, amount=ingredient['amount'])
         return recipe
 
     def update(self, instance, validated_data):
@@ -177,8 +181,8 @@ class RecipePostSerializer(serializers.ModelSerializer):
         ingredients = validated_data.get('ingredients')
         for ingredient in ingredients:
             IngredientMount.objects.create(
-                 ingredient=ingredient['id'],
-                 recipe=instance, amount=ingredient['amount'])
+                ingredient=ingredient['id'],
+                recipe=instance, amount=ingredient['amount'])
         instance.save()
         return instance
 

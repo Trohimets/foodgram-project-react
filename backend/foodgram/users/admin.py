@@ -13,6 +13,7 @@ class UserADmin(admin.ModelAdmin):
     )
     list_filter = ('first_name', 'email')
 
+
 class SubscribeADmin(admin.ModelAdmin):
     list_display = (
         'user',
