@@ -46,18 +46,6 @@ class IngredientAmountGetSerializer(serializers.ModelSerializer):
         return obj.ingredient.measurement_unit
 
 
-# class IngredientAmountGetSerializer(serializers.ModelSerializer):
-#     amount = serializers.SerializerMethodField(method_name='get_amount')
-
-#     class Meta:
-#         model = Ingredient
-#         fields = ('id', 'name', 'measurement_unit', 'amount')
-
-#     def get_amount(self, obj):
-#         ingredient = get_object_or_404(IngredientMount, id=obj.id)
-#         return ingredient.amount
-
-
 class IngredientAmountPostSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all()
