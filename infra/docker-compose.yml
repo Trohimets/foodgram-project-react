@@ -7,7 +7,7 @@ services:
     env_file:
       - ./.env
   web: 
-    build: ../backend/foodgram/
+    image: katrohimets/foodgram:latest
     restart: always
     volumes: 
       - static_value:/app/backend_static/ 
@@ -17,9 +17,7 @@ services:
     env_file: 
       - ./.env
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: katrohimets/foodgram_frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
   nginx:
