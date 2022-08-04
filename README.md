@@ -1,7 +1,7 @@
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
-docker-compose exec web python manage.py collectstatic --no-input 
-docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
+sudo docker-compose exec web python manage.py migrate
+sudo docker-compose exec web python manage.py createsuperuser
+sudo docker-compose exec web python manage.py collectstatic --no-input 
+sudo docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
 
 ![example workflow](https://github.com/trohimets/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
