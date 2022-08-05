@@ -21,8 +21,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['foodgram.sytes.net', '62.84.120.193', 'localhost']
-#['0.0.0.0', '127.0.0.1', 'localhost', 'web']
+ALLOWED_HOSTS = ['foodgram.sytes.net', '62.84.120.193', 'localhost', '127.0.0.1']
+#['0.0.0.0', 'localhost', 'web']
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
@@ -78,12 +78,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
-#}
+# }
 
 DATABASES = {
     'default': {
@@ -96,8 +96,8 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
+Password validation
+https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
    {
