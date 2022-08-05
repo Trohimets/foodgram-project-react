@@ -7,8 +7,8 @@ services:
     env_file:
       - ./.env
   web: 
-    #image: katrohimets/foodgram:latest
-    build: ../backend/foodgram/
+    image: katrohimets/foodgram:latest
+    #build: ../backend/foodgram/
     restart: always
     volumes: 
       - static_value:/app/backend_static/ 
