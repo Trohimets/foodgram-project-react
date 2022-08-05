@@ -52,7 +52,7 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
-        methods=['post',],
+        methods=['post', ],
         detail=False,
         permission_classes=(IsAuthenticated,),
     )
