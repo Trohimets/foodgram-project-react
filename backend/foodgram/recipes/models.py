@@ -163,12 +163,12 @@ class Favorite(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Списки Избранное'
-        constraints = (
-            models.UniqueConstraint(
-                fields=('user', 'recipe',),
-                name='unique_user_favorite_recipe',
-            ),
-        )
+        # constraints = (
+        #     models.UniqueConstraint(
+        #         fields=('user', 'recipe',),
+        #         name='unique_user_favorite_recipe',
+        #     ),
+        # )
 
     def __str__(self):
         return f'{self.user} -> {self.recipe}'
@@ -192,12 +192,12 @@ class Cart(models.Model):
     class Meta:
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
-        constraints = (
-            models.UniqueConstraint(
-                fields=('user', 'recipe',),
-                name='unique_user_cart_recipe',
-            ),
-        )
+        # constraints = (
+        #     models.UniqueConstraint(
+        #         fields=('user', 'recipe',),
+        #         name='unique_user_cart_recipe',
+        #     ),
+        # )
 
     def __str__(self):
         return f'{self.user} -> {self.recipe}'
