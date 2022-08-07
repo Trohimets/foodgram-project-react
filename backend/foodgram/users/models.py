@@ -3,6 +3,14 @@ from django.db import models
 
 
 class User(AbstractUser):
+    USER = 'user'
+    ADMIN = 'admin'
+
+    USER_ROLE = (
+        (USER, 'User role'),
+        (ADMIN, 'Administrator role'),
+    )
+
     username = models.CharField(
         max_length=150,
         unique=True,
@@ -36,6 +44,16 @@ class User(AbstractUser):
         verbose_name='Подписка на данного пользователя',
         help_text='Отметьте для подписки на данного пользователя'
     )
+    role = models.CharField(
+        'Пользовательская роль',
+        max_length=15,
+        choices=USER_ROLE,
+        default=USER
+    )
+    
+    @property
+    def is_admin(self):
+        return self.role == self.ADMIN or self.is_superuser
 
     def __str__(self):
         return self.username

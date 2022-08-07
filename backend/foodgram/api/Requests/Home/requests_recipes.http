@@ -1,5 +1,9 @@
-### Get a recipes list
-GET http://127.0.0.1:8000/api/recipes/
+### Get a tags list
+GET http://127.0.0.1:8000/api/tags/
+Content-Type: application/json
+
+### Get a ingredients list
+GET http://127.0.0.1:8000/api/ingredients/
 Content-Type: application/json
 
 ### Get a recipe by id
@@ -10,7 +14,7 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/api/recipes/
 Content-Type: application/json
 # for example:
-Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+Authorization: token bcc08aff8319b11fffef84da7cad405c8de7c043
 
 # for example:
 {

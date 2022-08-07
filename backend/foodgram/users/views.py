@@ -3,7 +3,7 @@ from djoser.views import UserViewSet
 from recipes.models import User
 from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
+from api.paginations import LimitPageNumberPagination
 from rest_framework.response import Response
 from users.models import Subscribe
 from users.serializers import SubShowSerializer
@@ -13,7 +13,7 @@ class CustomUserViewSet(UserViewSet):
     """Кастомный вьюсет пользователя."""
 
     queryset = User.objects.all()
-    pagination_class = PageNumberPagination
+    pagination_class = LimitPageNumberPagination
 
     @action(
         detail=True,
