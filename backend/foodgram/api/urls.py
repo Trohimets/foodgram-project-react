@@ -14,6 +14,9 @@ router.register(
     basename='ingredients')
 
 urlpatterns = [
+    path('users/set_password/',
+         UserViewSet.as_view({'post': 'set_password'}),
+         name='set_password'),
     path('recipes/download_shopping_cart/',
          CartViewSet.as_view({'get': 'download'}), name='download'),
     path('users/subscriptions/',
