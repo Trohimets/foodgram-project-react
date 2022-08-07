@@ -4,6 +4,7 @@ from users.models import Subscribe, User
 
 
 class UserShowSerializer(serializers.ModelSerializer):
+    """Сериализатор для вывода пользователя/списка пользователей."""
     email = serializers.EmailField(required=True)
     username = serializers.CharField(max_length=150, required=True)
     first_name = serializers.CharField(max_length=150, required=True)
@@ -29,48 +30,9 @@ class UserShowSerializer(serializers.ModelSerializer):
             'is_subscribed',
         )
 
-class PasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(style={"input_type": "password"})
-
-    def validate(self, attrs):
-        user = self.context["request"].user or self.user
-        # why assert? There are ValidationError / fail everywhere
-        assert user is not None
-
-        try:
-            validate_password(attrs["new_password"], user)
-        except django_exceptions.ValidationError as e:
-            raise serializers.ValidationError({"new_password": list(e.messages)})
-        return super().validate(attrs)
-
-class PasswordSerializer(serializers.Serializer):
-    """
-    Serializer for password change endpoint.
-    """
-    current_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
-
-    class Meta:
-        model = User
-        fields = (
-            'new_password',
-            'current_password'
-        )
-        write_only_fields = ('new_password',)
-
-    def validate_current_password(self, request, value):
-        print('4')
-        current_user = request.user
-        print('5')
-        current_password = current_user.password
-        print('6')
-        if not current_password == value:
-            raise serializers.ValidationError('Текущий пароль неверный')
-        return value
-
-
 
 class UserSerializer(serializers.ModelSerializer):
+    """Основной кастомный сериализатор пользователя с доп. полями."""
     email = serializers.EmailField(required=True)
     username = serializers.CharField(max_length=150, required=True)
     first_name = serializers.CharField(max_length=150, required=True)
@@ -126,6 +88,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignupSerializer(serializers.ModelSerializer):
+    """Сериализатор регистрации."""
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField(max_length=254)
     banned_names = ('me', 'admin', 'ADMIN', 'administrator', 'moderator')
@@ -157,11 +120,13 @@ class SignupSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.Serializer):
+    """Сериализатор токена."""
     username = serializers.CharField(max_length=150)
     confirmation_code = serializers.CharField(max_length=24)
 
 
 class SubShowSerializer(UserShowSerializer):
+    """Сериализатор для вывода пользователя/списка пользователей."""
     email = serializers.ReadOnlyField(source='following.email')
     id = serializers.ReadOnlyField(source='following.id')
     username = serializers.ReadOnlyField(source='following.username')
@@ -183,9 +148,11 @@ class SubShowSerializer(UserShowSerializer):
         )
 
     def get_is_subscribed(self, username):
+        """Если мы запрашиваем этот метод — мы подписаны на пользователя"""
         return True
 
     def get_recipes(self, data):
+        """Получаем рецепты пользователя."""
         limit = self.context.get('request').query_params.get('recipes_limit')
         if not limit:
             limit = 3
