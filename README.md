@@ -1,10 +1,12 @@
 ![example workflow](https://github.com/trohimets/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
+## С проектом можно ознакомиться по адресу http://foodgram.sytes.net/
+
 # Логин и пароль администратора для проверки ревьюером
 
 login: admin
 
-password: Practice05
+password: Practice06
 
 # Cервис для публикаций и обмена рецептами.
 
