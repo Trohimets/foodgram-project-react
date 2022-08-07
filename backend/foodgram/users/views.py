@@ -58,32 +58,10 @@ class CustomUserViewSet(UserViewSet):
         methods=('GET',),
         permission_classes=[permissions.IsAuthenticatedOrReadOnly],
     )
-<<<<<<< HEAD
-    def set_password(self, request):
-        print('1')
-        serializer = PasswordSerializer(data=request.data)
-        print('2')
-        if serializer.is_valid():
-            serializer.save()
-            print('3')
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        print('9')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SubscribeViewSet(viewsets.ModelViewSet):
-    serializer_class = SubscribeSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    pagination_class = LimitPageNumberPagination
-
-    def get_queryset(self):
-        return get_list_or_404(Subscribe, user=self.request.user)
-=======
     def subscriptions(self, request):
         pages = self.paginate_queryset(
             Subscribe.objects.filter(user=request.user)
         )
->>>>>>> djoser
 
         serializer = SubShowSerializer(
             pages, many=True, context={'request': request}
