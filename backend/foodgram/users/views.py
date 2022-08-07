@@ -1,94 +1,72 @@
-from http import HTTPStatus
-
-from django.shortcuts import get_list_or_404, get_object_or_404
-from rest_framework import permissions, status, viewsets
+from django.shortcuts import get_object_or_404
+from djoser.views import UserViewSet
+from recipes.models import User
+from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from api.paginations import LimitPageNumberPagination
 from rest_framework.response import Response
-
-from foodgram.pagination import LimitPageNumberPagination
-from users.models import Subscribe, User
-from users.serializers import (RegistrationSerializer, SubscribeSerializer,
-                               UserDetailSerializer, PasswordSerializer)
+from users.models import Subscribe
+from users.serializers import SubShowSerializer
 
 
-class UserViewSet(viewsets.ViewSet):
+class CustomUserViewSet(UserViewSet):
+    """Кастомный вьюсет пользователя."""
+
+    queryset = User.objects.all()
     pagination_class = LimitPageNumberPagination
 
-    def create(self, request):
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserDetailSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = User.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = UserDetailSerializer(user)
-        return Response(serializer.data)
-
     @action(
-        methods=['get', 'patch'],
-        detail=False,
-        permission_classes=(IsAuthenticated,),
+        detail=True,
+        methods=('POST', 'DELETE'),
+        url_path='subscribe',
+        permission_classes=[permissions.IsAuthenticatedOrReadOnly],
     )
-    def me(self, request):
-        if request.method == 'GET':
-            serializer = UserDetailSerializer(request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        serializer = UserDetailSerializer(
-            request.user,
-            data=request.data,
-            partial=True
+    def subscribe(self, request, id=None):
+        user = get_object_or_404(User, id=id)
+        follow = Subscribe.objects.filter(
+            user=request.user,
+            following=user
         )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.method == 'POST':
+            if user == request.user:
+                error = {
+                    'errors': 'Вы пытаетесь подписаться на себя.'
+                }
+                return Response(error, status=status.HTTP_400_BAD_REQUEST)
+            obj, created = Subscribe.objects.get_or_create(
+                user=request.user,
+                following=user
+            )
+            if not created:
+                error = {
+                    'errors': 'Вы уже подписаны на этого пользователя.'
+                }
+                return Response(error, status=status.HTTP_400_BAD_REQUEST)
+            serializer = SubShowSerializer(obj, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        if not follow.exists():
+            error = {
+                'errors': 'Вы не были подписаны на этого пользователя.'
+            }
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        follow.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
-        methods=['post', ],
         detail=False,
-        permission_classes=(IsAuthenticated,),
+        methods=('GET',),
+        permission_classes=[permissions.IsAuthenticatedOrReadOnly],
     )
-    def set_password(self, request):
-        print('1')
-        serializer = PasswordSerializer(data=request.data)
-        print('2')
-        if serializer.is_valid():
-            serializer.save()
-            print('3')
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        print('9')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def subscriptions(self, request):
+        pages = self.paginate_queryset(
+            Subscribe.objects.filter(user=request.user)
+        )
 
 
-class SubscribeViewSet(viewsets.ModelViewSet):
-    serializer_class = SubscribeSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    pagination_class = LimitPageNumberPagination
+        serializer = SubShowSerializer(
+            pages, many=True, context={'request': request}
+        )
 
-    def get_queryset(self):
-        return get_list_or_404(Subscribe, user=self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        user_id = self.kwargs.get('users_id')
-        user = get_object_or_404(User, id=user_id)
-        subscribe = Subscribe.objects.create(
-            user=request.user, following=user)
-        serializer = SubscribeSerializer(subscribe,
-                                         context={'request': request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def delete(self, request, *args, **kwargs):
-        author_id = self.kwargs['users_id']
-        user_id = request.user.id
-        subscribe = get_object_or_404(
-            Subscribe, user__id=user_id, following__id=author_id)
-        subscribe.delete()
-        return Response(HTTPStatus.NO_CONTENT)
+        return self.get_paginated_response(serializer.data)

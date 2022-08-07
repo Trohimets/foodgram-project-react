@@ -19,9 +19,9 @@ STATIC_URL = '/backend_static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = True
 
-ALLOWED_HOSTS = ['foodgram.sytes.net', '62.84.120.193', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['foodgram.sytes.net', '62.84.120.193', 'localhost', '127.0.0.1', 'web']
 #['0.0.0.0', 'localhost', 'web']
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
@@ -76,23 +76,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 
-DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.sqlite3',
-       'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-   }
-}
+
 
 # DATABASES = {
-#     'default': {
-#         'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
-#         'NAME': os.getenv('DB_NAME', default='postgres'),
-#         'USER': os.getenv('POSTGRES_USER', default='postgres'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
-#         'HOST': os.getenv('DB_HOST', default='db'),
-#         'PORT': os.getenv('DB_PORT', default='5432')
-#     }
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
 # }
+
+ DATABASES = {
+     'default': {
+         'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+         'NAME': os.getenv('DB_NAME', default='postgres'),
+         'USER': os.getenv('POSTGRES_USER', default='postgres'),
+         'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+         'HOST': os.getenv('DB_HOST', default='db'),
+         'PORT': os.getenv('DB_PORT', default='5432')
+     }
+ }
 
 #Password validation
 #https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -145,8 +147,12 @@ AUTH_USER_MODEL = 'users.User'
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
-        'user_create': 'users.serializers.RegistrationSerializer',
-        'user': 'users.serializers.RegistrationSerializer',
-        'current_user': 'users.serializers.RegistrationSerializer',
+        'user': 'users.serializers.UserShowSerializer',
+        'current_user': 'users.serializers.UserShowSerializer',
+        'user_create': 'users.serializers.UserSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ('rest_framework.permissions.IsAuthenticated',),
+        'user_list': ('rest_framework.permissions.AllowAny',)
     }
     }
