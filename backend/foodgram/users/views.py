@@ -61,6 +61,8 @@ class CustomUserViewSet(UserViewSet):
         pages = self.paginate_queryset(
             Subscribe.objects.filter(user=request.user)
         )
+
+
         serializer = SubShowSerializer(
             pages, many=True, context={'request': request}
         )
