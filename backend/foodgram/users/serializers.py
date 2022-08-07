@@ -1,20 +1,23 @@
-from djoser.serializers import UserCreateSerializer
-from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from api.serializers import RecipeGetSerializer
-from recipes.models import Recipe
+from rest_framework import serializers
 from users.models import Subscribe, User
 
 
-class RegistrationSerializer(UserCreateSerializer):
-    is_subscribed = serializers.SerializerMethodField(
-        method_name='get_is_subscribed')
-    username = serializers.CharField(
-        validators=(UniqueValidator(queryset=User.objects.all()),)
-    )
-    email = serializers.EmailField(
-        validators=(UniqueValidator(queryset=User.objects.all()),)
-    )
+class UserShowSerializer(serializers.ModelSerializer):
+    """Сериализатор для вывода пользователя/списка пользователей."""
+    email = serializers.EmailField(required=True)
+    username = serializers.CharField(max_length=150, required=True)
+    first_name = serializers.CharField(max_length=150, required=True)
+    last_name = serializers.CharField(max_length=150, required=True)
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
+
+    def get_is_subscribed(self, username):
+        user = self.context["request"].user
+        return (not user.is_anonymous
+                and Subscribe.objects.filter(
+                    user=user,
+                    following=username
+                ).exists())
 
     class Meta:
         model = User
@@ -24,82 +27,134 @@ class RegistrationSerializer(UserCreateSerializer):
             'username',
             'first_name',
             'last_name',
-            'password'
+            'is_subscribed',
         )
-        write_only_fields = ('password',)
-        read_only_fields = ('id',)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Основной кастомный сериализатор пользователя с доп. полями."""
+    email = serializers.EmailField(required=True)
+    username = serializers.CharField(max_length=150, required=True)
+    first_name = serializers.CharField(max_length=150, required=True)
+    last_name = serializers.CharField(max_length=150, required=True)
+    password = serializers.CharField(
+        min_length=4,
+        write_only=True,
+        required=True,
+        style={'input_type': 'password', 'placeholder': 'Password'}
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'username',
+            'first_name',
+            'last_name',
+            'password',
+            'role'
+        )
+
+    def validate_email(self, data):
+        if User.objects.filter(email=data).exists():
+            raise serializers.ValidationError(
+                "Пользователь с такой почтой уже зарегистрирован."
+            )
+
+        return data
+
+    def validate_username(self, data):
+        if User.objects.filter(username=data).exists():
+            raise serializers.ValidationError(
+                "Пользователь с таким именем уже существует."
+            )
+
+        return data
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
-        )
+        user = super().create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
         return user
 
-    def is_subscribed(self, obj):
-        user = self.context['request'].user
-        return (
-            user.is_authenticated
-            and obj.subscribing.filter(user=user).exists()
-        )
+    def update(self, instance, validated_data):
+        user = super().update(instance, validated_data)
+        try:
+            user.set_password(validated_data['password'])
+            user.save()
+        except KeyError:
+            pass
+        return user
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField(
-        method_name='get_is_subscribed')
+class SignupSerializer(serializers.ModelSerializer):
+    """Сериализатор регистрации."""
+    username = serializers.CharField(max_length=150)
+    email = serializers.EmailField(max_length=254)
+    banned_names = ('me', 'admin', 'ADMIN', 'administrator', 'moderator')
 
     class Meta:
         model = User
-        fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'is_subscribed'
-        )
+        fields = ('email', 'username',)
 
-    def is_subscribed(self, obj):
-        user = self.context['request'].user
-        return (
-            user.is_authenticated
-            and obj.subscribing.filter(user=user).exists()
-        )
+    def validate_username(self, data):
+        if data in self.banned_names:
+            raise serializers.ValidationError(
+                "Нельзя использовать такое имя."
+            )
+
+        if User.objects.filter(username=data).exists():
+            raise serializers.ValidationError(
+                "Пользователь с таким именем уже существует."
+            )
+
+        return data
+
+    def validate_email(self, data):
+        if User.objects.filter(email=data).exists():
+            raise serializers.ValidationError(
+                "Пользователь с такой почтой уже зарегистрирован."
+            )
+
+        return data
 
 
-class SubscribeSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='following.id')
+class TokenSerializer(serializers.Serializer):
+    """Сериализатор токена."""
+    username = serializers.CharField(max_length=150)
+    confirmation_code = serializers.CharField(max_length=24)
+
+
+class SubShowSerializer(UserShowSerializer):
+    """Сериализатор для вывода пользователя/списка пользователей."""
     email = serializers.ReadOnlyField(source='following.email')
+    id = serializers.ReadOnlyField(source='following.id')
     username = serializers.ReadOnlyField(source='following.username')
     first_name = serializers.ReadOnlyField(source='following.first_name')
     last_name = serializers.ReadOnlyField(source='following.last_name')
-    is_subscribed = serializers.SerializerMethodField(
-        method_name='get_is_subscribed')
-    recipes = serializers.SerializerMethodField(
-        method_name='get_recipes')
-    recipes_count = serializers.SerializerMethodField(
-        method_name='get_recipes_count')
+    is_subscribed = serializers.SerializerMethodField()
+    recipes = serializers.SerializerMethodField()
 
     class Meta:
-        model = Subscribe
-        fields = ('id', 'email', 'username', 'first_name', 'last_name',
-                  'is_subscribed', 'recipes', 'recipes_count')
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_subscribed',
+            'recipes',
+        )
 
-    def get_is_subscribed(self, obj):
-        return Subscribe.objects.filter(
-            user=obj.user, following=obj.following
-        ).exists()
+    def get_is_subscribed(self, username):
+        """Если мы запрашиваем этот метод — мы подписаны на пользователя"""
+        return True
 
-    def get_recipes(self, obj):
-        request = self.context.get('request')
-        limit = request.GET.get('recipes_limit')
-        queryset = Recipe.objects.filter(author=obj.following)
-        if limit:
-            queryset = queryset[:int(limit)]
-        return RecipeGetSerializer(queryset, many=True).data
-
-    def get_recipes_count(self, obj):
-        return Recipe.objects.filter(author=obj.following).count()
+    def get_recipes(self, data):
+        """Получаем рецепты пользователя."""
+        limit = self.context.get('request').query_params.get('recipes_limit')
+        if not limit:
+            limit = 3
+        recipes = data.following.recipes.all()[:int(limit)]
+        return RecipeGetSerializer(recipes, many=True).data

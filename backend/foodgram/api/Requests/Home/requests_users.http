@@ -14,7 +14,7 @@ Content-Type: application/json
     "username": "oland3",
     "first_name": "volan",
     "last_name": "demort",
-    "password": "12345"
+    "password": "12345Mars"
     }
 
 ### Take token for user oland2
@@ -23,15 +23,15 @@ Content-Type: application/json
 # for example:
 
 {
-    "email": "oland2@mail.ru",
-    "password": "12345"
+    "email": "oland3@mail.ru",
+    "password": "12345Mars"
     }
 
 ### Current user
 GET http://127.0.0.1:8000/api/users/me/
 Content-Type: application/json
 # for example:
-Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+Authorization: token 054b41a57636425f70a89c3613f38252ceeb05e4
 
 ### Take token for admin
 POST http://127.0.0.1:8000/api/auth/token/login/
@@ -42,3 +42,21 @@ Content-Type: application/json
     "email": "admin@mail.ru",
     "password": "admin"
     }
+
+### Change password for user
+POST http://127.0.0.1:8000/api/users/set_password/
+Content-Type: application/json
+# for example petr:
+Authorization: token 054b41a57636425f70a89c3613f38252ceeb05e4
+
+{
+"new_password": "54321Mars",
+"current_password": "12345Mars"
+}
+
+
+
+
+
+
+    
