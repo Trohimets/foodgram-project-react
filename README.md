@@ -1,15 +1,9 @@
-sudo docker-compose exec web python manage.py migrate
-sudo docker-compose exec web python manage.py createsuperuser
-sudo docker-compose exec web python manage.py collectstatic --no-input 
-sudo docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
-
-docker-compose exec web python manage.py migrate
-docker-compose exec web python manage.py createsuperuser
-docker-compose exec web python manage.py collectstatic --no-input 
-docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
-
-
 ![example workflow](https://github.com/trohimets/foodgram-project-react/actions/workflows/main.yml/badge.svg)
+
+# Логин и пароль администратора для проверки ревьюером
+
+login: admin
+password: Practice05
 
 # Cервис для публикаций и обмена рецептами.
 
@@ -176,3 +170,16 @@ DB_PORT=5432
 
 ## Стек технологий
 Python 3.9.7, Django 3.2.7, Django REST Framework 3.12, PostgresQL, Docker, Yandex.Cloud.
+
+
+## Команды, необходимые для работы с контейнерами и на сервере
+
+sudo docker-compose exec web python manage.py migrate
+sudo docker-compose exec web python manage.py createsuperuser
+sudo docker-compose exec web python manage.py collectstatic --no-input 
+sudo docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
+
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+docker-compose exec web python manage.py collectstatic --no-input 
+docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
