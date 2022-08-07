@@ -50,7 +50,7 @@ class User(AbstractUser):
         choices=USER_ROLE,
         default=USER
     )
-    
+
     @property
     def is_admin(self):
         return self.role == self.ADMIN or self.is_superuser
