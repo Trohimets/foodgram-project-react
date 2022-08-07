@@ -46,6 +46,19 @@ class RegistrationSerializer(UserCreateSerializer):
             and obj.subscribing.filter(user=user).exists()
         )
 
+class PasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(style={"input_type": "password"})
+
+    def validate(self, attrs):
+        user = self.context["request"].user or self.user
+        # why assert? There are ValidationError / fail everywhere
+        assert user is not None
+
+        try:
+            validate_password(attrs["new_password"], user)
+        except django_exceptions.ValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+        return super().validate(attrs)
 
 class PasswordSerializer(serializers.Serializer):
     """
@@ -53,6 +66,14 @@ class PasswordSerializer(serializers.Serializer):
     """
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'new_password',
+            'current_password'
+        )
+        write_only_fields = ('new_password',)
 
     def validate_current_password(self, request, value):
         print('4')
