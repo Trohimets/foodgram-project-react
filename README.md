@@ -176,11 +176,17 @@ Python 3.9.7, Django 3.2.7, Django REST Framework 3.12, PostgresQL, Docker, Yand
 ## Команды, необходимые для работы с контейнерами и на сервере
 
 sudo docker-compose exec web python manage.py migrate
+
 sudo docker-compose exec web python manage.py createsuperuser
+
 sudo docker-compose exec web python manage.py collectstatic --no-input 
+
 sudo docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
 
 docker-compose exec web python manage.py migrate
+
 docker-compose exec web python manage.py createsuperuser
+
 docker-compose exec web python manage.py collectstatic --no-input 
+
 docker-compose exec web python manage.py uploadDB tags.csv ingredients.csv
