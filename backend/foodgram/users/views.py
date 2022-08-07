@@ -10,7 +10,6 @@ from users.serializers import SubShowSerializer
 
 
 class CustomUserViewSet(UserViewSet):
-    """Кастомный вьюсет пользователя."""
 
     queryset = User.objects.all()
     pagination_class = LimitPageNumberPagination
@@ -62,9 +61,7 @@ class CustomUserViewSet(UserViewSet):
         pages = self.paginate_queryset(
             Subscribe.objects.filter(user=request.user)
         )
-
         serializer = SubShowSerializer(
             pages, many=True, context={'request': request}
         )
-
         return self.get_paginated_response(serializer.data)

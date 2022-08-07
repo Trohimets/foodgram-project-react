@@ -4,7 +4,6 @@ from users.models import Subscribe, User
 
 
 class UserShowSerializer(serializers.ModelSerializer):
-    """Сериализатор для вывода пользователя/списка пользователей."""
     email = serializers.EmailField(required=True)
     username = serializers.CharField(max_length=150, required=True)
     first_name = serializers.CharField(max_length=150, required=True)
@@ -32,7 +31,6 @@ class UserShowSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Основной кастомный сериализатор пользователя с доп. полями."""
     email = serializers.EmailField(required=True)
     username = serializers.CharField(max_length=150, required=True)
     first_name = serializers.CharField(max_length=150, required=True)
@@ -88,7 +86,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignupSerializer(serializers.ModelSerializer):
-    """Сериализатор регистрации."""
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField(max_length=254)
     banned_names = ('me', 'admin', 'ADMIN', 'administrator', 'moderator')
@@ -120,13 +117,11 @@ class SignupSerializer(serializers.ModelSerializer):
 
 
 class TokenSerializer(serializers.Serializer):
-    """Сериализатор токена."""
     username = serializers.CharField(max_length=150)
     confirmation_code = serializers.CharField(max_length=24)
 
 
 class SubShowSerializer(UserShowSerializer):
-    """Сериализатор для вывода пользователя/списка пользователей."""
     email = serializers.ReadOnlyField(source='following.email')
     id = serializers.ReadOnlyField(source='following.id')
     username = serializers.ReadOnlyField(source='following.username')
@@ -148,11 +143,9 @@ class SubShowSerializer(UserShowSerializer):
         )
 
     def get_is_subscribed(self, username):
-        """Если мы запрашиваем этот метод — мы подписаны на пользователя"""
         return True
 
     def get_recipes(self, data):
-        """Получаем рецепты пользователя."""
         limit = self.context.get('request').query_params.get('recipes_limit')
         if not limit:
             limit = 3
