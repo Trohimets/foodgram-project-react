@@ -47,6 +47,25 @@ class RegistrationSerializer(UserCreateSerializer):
         )
 
 
+class PasswordSerializer(serializers.Serializer):
+    """
+    Serializer for password change endpoint.
+    """
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_current_password(self, request, value):
+        print('4')
+        current_user = request.user
+        print('5')
+        current_password = current_user.password
+        print('6')
+        if not current_password == value:
+            raise serializers.ValidationError('Текущий пароль неверный')
+        return value
+
+
+
 class UserDetailSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField(
         method_name='get_is_subscribed')

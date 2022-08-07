@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from foodgram.pagination import LimitPageNumberPagination
 from users.models import Subscribe, User
 from users.serializers import (RegistrationSerializer, SubscribeSerializer,
-                               UserDetailSerializer)
+                               UserDetailSerializer, PasswordSerializer)
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -57,13 +57,14 @@ class UserViewSet(viewsets.ViewSet):
         permission_classes=(IsAuthenticated,),
     )
     def set_password(self, request):
-        serializer = RegistrationSerializer(
-            request.user,
-            data=request.data,
-            partial=True)
+        print('1')
+        serializer = PasswordSerializer(data=request.data)
+        print('2')
         if serializer.is_valid():
             serializer.save()
+            print('3')
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+        print('9')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
