@@ -21,7 +21,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['foodgram.sytes.net', '62.84.120.193', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [*]
+#['foodgram.sytes.net', '62.84.120.193', 'localhost', '127.0.0.1']
 #['0.0.0.0', 'localhost', 'web']
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
