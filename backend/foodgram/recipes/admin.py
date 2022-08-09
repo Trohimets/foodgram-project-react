@@ -27,7 +27,7 @@ class FavoriteAdmin(admin.ModelAdmin):
         'recipe',
         'get_tags'
     )
-    search_fields = ('name', 'author__username', 'author__email',)
+    search_fields = ('recipe__name', 'author__username', 'author__email',)
     # list_filter = ('get_tags',)
     empty_value_display = EMPTY
 
@@ -43,7 +43,7 @@ class CartAdmin(admin.ModelAdmin):
         'user',
         'recipe'
     )
-    search_fields = ('name', 'author__username', 'author__email',)
+    search_fields = ('recipe__name', 'author__username', 'author__email',)
     # list_filter = ('tags',)
 
 
