@@ -10,8 +10,8 @@ Content-Type: application/json
 # for example:
 
 {
-    "email": "oland3@mail.ru",
-    "username": "oland3",
+    "email": "oland4@mail.ru",
+    "username": "oland4",
     "first_name": "volan",
     "last_name": "demort",
     "password": "12345Mars"

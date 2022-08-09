@@ -19,7 +19,7 @@ STATIC_URL = '/backend_static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['foodgram.sytes.net', '62.84.120.193', 'localhost', '127.0.0.1', 'web']
 #['0.0.0.0', 'localhost', 'web']

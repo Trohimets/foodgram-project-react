@@ -14,11 +14,11 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/api/recipes/
 Content-Type: application/json
 # for example:
-Authorization: token bcc08aff8319b11fffef84da7cad405c8de7c043
+Authorization: token 9179ca37d041f1a49df1e3007e0113fb2e54d55b
 
 # for example:
 {
-  "name": "test for fav",
+  "name": "just improve",
   "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
   "text": "it will be plov!",
   "ingredients": [

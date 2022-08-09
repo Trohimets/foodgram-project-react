@@ -19,8 +19,12 @@ class SubscribeADmin(admin.ModelAdmin):
         'user',
         'following',
     )
-    search_fields = ('user', 'following',)
-    list_filter = ('following', 'user')
+    search_fields = ('user__email',
+                     'following__email',
+                     'user__username',
+                     'following__username',
+                     )
+    list_filter = ('following__username', 'user__username')
 
 
 admin.site.register(User)
