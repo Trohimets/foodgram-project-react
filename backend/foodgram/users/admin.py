@@ -27,5 +27,5 @@ class SubscribeADmin(admin.ModelAdmin):
     list_filter = ('following__username', 'user__username')
 
 
-admin.site.register(User)
-admin.site.register(Subscribe)
+admin.site.register(User, UserADmin)
+admin.site.register(Subscribe, SubscribeADmin)
