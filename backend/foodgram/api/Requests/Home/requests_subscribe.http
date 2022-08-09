@@ -9,11 +9,11 @@ Authorization: token bcc08aff8319b11fffef84da7cad405c8de7c043
 
 
 ### subscribe user
-POST http://127.0.0.1:8000/api/users/1/subscribe/?recipes_limit=2
+POST http://127.0.0.1:8000/api/users/3/subscribe/?recipes_limit=2
 Content-Type: application/json
 # for example:
 #Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
-Authorization: token bcc08aff8319b11fffef84da7cad405c8de7c043
+Authorization: token 9179ca37d041f1a49df1e3007e0113fb2e54d55b
 
 ### unsubscribe user
 DELETE http://127.0.0.1:8000/api/users/1/subscribe/

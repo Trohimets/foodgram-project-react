@@ -2,11 +2,14 @@ from django.contrib import admin
 
 from django.contrib.admin import register
 from recipes.models import Cart, Favorite, Ingredient
-from recipes.models import Recipe, Tag
+from recipes.models import Recipe, Tag, IngredientMount
 
 EMPTY = '< Тут Пусто >'
-# class IngredientMountInLine(admin.TabularInLine):
+
+
+# class IngredientInLine(admin.TabularInline):
 #     model = IngredientMount
+#     raw_id_fields = ['ingredients']
 
 
 @register(Recipe)
@@ -18,26 +21,18 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'author__username', 'author__email')
     list_filter = ('tags',)
-    # inlines = [IngredientMountInLine]
+    # inlines = [IngredientInLine]
 
 
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = (
         'user',
-        'recipe',
-        'get_tags'
+        'recipe'
     )
     search_fields = ('recipe__name',
                      'recipe__author__username',
                      'recipe__author__email',)
-    # list_filter = ('get_tags',)
-    empty_value_display = EMPTY
-
-    def get_tags(self, obj):
-        try:
-            return obj.recipe.tags
-        except Favorite.recipe.RelatedObjectDoesNotExist:
-            return EMPTY
+    list_filter = ('recipe__tags',)
 
 
 class CartAdmin(admin.ModelAdmin):
@@ -48,7 +43,7 @@ class CartAdmin(admin.ModelAdmin):
     search_fields = ('recipe__name',
                      'recipe__author__username',
                      'recipe__author__email',)
-    # list_filter = ('tags',)
+    list_filter = ('recipe__tags',)
 
 
 class TagAdmin(admin.ModelAdmin):

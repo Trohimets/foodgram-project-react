@@ -6,10 +6,10 @@ Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
 
 
 ### Create a Favorite
-POST http://127.0.0.1:8000/api/recipes/32/favorite/
+POST http://127.0.0.1:8000/api/recipes/2/favorite/
 Content-Type: application/json
 # for example:
-Authorization: token 8921055979d3c777f5ad87ddb05ebab4b646daf9
+Authorization: token 9179ca37d041f1a49df1e3007e0113fb2e54d55b
 
 # for example:
 {
