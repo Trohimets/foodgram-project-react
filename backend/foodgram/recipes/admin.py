@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from django.contrib.admin import register
 from recipes.models import Cart, Favorite, Ingredient
-from recipes.models import Recipe, Tag, IngredientMount
+from recipes.models import Recipe, Tag
 
 EMPTY = '< Тут Пусто >'
 # class IngredientMountInLine(admin.TabularInLine):
@@ -28,7 +28,7 @@ class FavoriteAdmin(admin.ModelAdmin):
         'get_tags'
     )
     search_fields = ('name', 'author__username', 'author__email',)
-    #list_filter = ('get_tags',)
+    # list_filter = ('get_tags',)
     empty_value_display = EMPTY
 
     def get_tags(self, obj):
@@ -44,7 +44,7 @@ class CartAdmin(admin.ModelAdmin):
         'recipe'
     )
     search_fields = ('name', 'author__username', 'author__email',)
-    #list_filter = ('tags',)
+    # list_filter = ('tags',)
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -64,7 +64,7 @@ class IngredientAdmin(admin.ModelAdmin):
     list_filter = ('measurement_unit',)
 
 
-#admin.site.register(Recipe, RecipeAdmin)
+# admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
