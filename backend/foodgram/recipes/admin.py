@@ -7,9 +7,9 @@ from recipes.models import Recipe, Tag, IngredientMount
 EMPTY = '< Тут Пусто >'
 
 
-# class IngredientInLine(admin.TabularInline):
-#     model = IngredientMount
-#     raw_id_fields = ['ingredients']
+class IngredientInLine(admin.TabularInline):
+    model = IngredientMount
+    raw_id_fields = ['ingredient']
 
 
 @register(Recipe)
@@ -21,7 +21,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'author__username', 'author__email')
     list_filter = ('tags',)
-    # inlines = [IngredientInLine]
+    inlines = [IngredientInLine]
 
 
 class FavoriteAdmin(admin.ModelAdmin):
