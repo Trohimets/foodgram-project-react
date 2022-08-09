@@ -25,19 +25,19 @@ Content-Type: application/json
 # for example:
 
 {
-    "email": "admin@mail.ru",
-    "password": "admin"
+    "email": "petr@mail.ru",
+    "password": "petr"
     }
 
 ### Change password for admin
 POST http://127.0.0.1:8000/api/users/set_password/
 Content-Type: application/json
 # for example petr:
-Authorization: token c6cf402884a5ffc25987bbe16b0562f2c02bf2a6
+Authorization: token f54c94b1f41fcc68fb945bb773d59a4eca55e128
 
 {
 "new_password": "admin",
-"current_password": "admin1"
+"current_password": "petr"
 }
 
   

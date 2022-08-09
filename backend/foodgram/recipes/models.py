@@ -132,9 +132,10 @@ class IngredientMount(models.Model):
         verbose_name='Рецепт',
         help_text='Выберите рецепт'
     )
-    amount = models.IntegerField(
+    amount = models.PositiveIntegerField(
         verbose_name='Количество ингредиента',
-        help_text='Введите количество продукта'
+        help_text='Введите количество продукта',
+        validators=[MinValueValidator(1), ],
     )
 
     class Meta:

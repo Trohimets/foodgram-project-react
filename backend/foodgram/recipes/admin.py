@@ -9,8 +9,8 @@ class RecipeAdmin(admin.ModelAdmin):
         'name',
         'cooking_time'
     )
-    list_filter = ('author', 'name'
-                   )
+    search_fields = ('name', 'author',)
+    list_filter = ('tags',)
 
 
 class FavoriteAdmin(admin.ModelAdmin):
@@ -18,6 +18,8 @@ class FavoriteAdmin(admin.ModelAdmin):
         'user',
         'recipe'
     )
+    search_fields = ('name', 'author__username', 'author__email',)
+    list_filter = ('tags',)
 
 
 class CartAdmin(admin.ModelAdmin):
@@ -25,6 +27,8 @@ class CartAdmin(admin.ModelAdmin):
         'user',
         'recipe'
     )
+    search_fields = ('name', 'author',)
+    list_filter = ('tags',)
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -40,7 +44,8 @@ class IngredientAdmin(admin.ModelAdmin):
         'name',
         'measurement_unit'
     )
-    list_filter = ('name',)
+    search_fields = ('name',)
+    list_filter = ('measurement_unit',)
 
 
 admin.site.register(Recipe, RecipeAdmin)

@@ -19,6 +19,7 @@ class SubscribeADmin(admin.ModelAdmin):
         'user',
         'following',
     )
+    search_fields = ('user', 'following',)
     list_filter = ('following', 'user')
 
 

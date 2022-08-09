@@ -19,10 +19,12 @@ services:
       - ./.env
   frontend:
     image: katrohimets/foodgram_frontend:v1.03.08.22
+    restart: always
     volumes:
       - ../frontend/:/app/result_build/
   nginx:
     image: nginx:1.19.3
+    restart: always
     ports:
       - "80:80"
     volumes:
