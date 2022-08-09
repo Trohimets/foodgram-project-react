@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
+from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag, IngredientMount
+
+
+class IngredientInLine(admin.TabularInLine):
+    model = IngredientMount
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -11,6 +15,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'author',)
     list_filter = ('tags',)
+    inlines = [IngredientInLine]
 
 
 class FavoriteAdmin(admin.ModelAdmin):
